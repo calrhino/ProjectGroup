@@ -1,0 +1,14 @@
+.nested_el, .regular_el {
+    background: lightgray;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.nested_el {
+    padding: 10px 5px 10px 5px;
+}
+
+.nopad {
+    padding: 0px;
+    margin: 0px;
+}

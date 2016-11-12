@@ -1,0 +1,85 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+
+
+<div id="main-content">
+    <header v-if="page=='welcome'" class="text-center">
+        <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
+        <button class="btn">Log Into Google</button>
+    </header>
+
+    <div v-if="page=='loggedin'">
+        <div v-for="(classe, class_idx) in classes">
+            <div class="nested_el row" v-on:click="toggleClass(class_idx)" v-if="sel_class==-1||sel_class==class_idx">
+                <div class="nopad">Class</div>
+                <hr class="nopad">
+                <div>${classe.name}</div>
+                <div>${classe.description}</div>
+                <div v-if="sel_class==class_idx">
+                    <div v-for="(project, project_idx) in classe.projects">
+                        <div class="nested_el" v-on:click.stop="toggleProject(project_idx)"
+                             v-if="sel_project==-1||sel_project==project_idx">
+                            <div class="nopad">Project</div>
+                            <hr class="nopad">
+                            <div>${project.name}</div>
+                            <div>${project.description}</div>
+                            <div class="nested_el" v-if="sel_project==project_idx" v-on:click.stop>
+                                <span v-if="is_contact">To: </span>
+                                <span v-for="(member, member_idx) in project.members">
+                                    <span v-on:click="toggleMember(member_idx)"
+                                          v-if="sel_member==-1||sel_member==member_idx">
+                                        <span class="regular_el nopad">${member}</span>
+                                    </span>
+                                </span>
+                                <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">all members</button>
+                                <button class="btn" v-if="!is_contact" v-on:click="showContact">contact</button>
+                                <div v-if="is_contact" v-on:click.stop>
+                                    <hr class="nopad">
+                                    <textarea class="nested_el" v-model="user_message"></textarea>
+                                    <button class="btn" v-on:click="contactMember(sel_member)">submit</button>
+                                    <button class="btn" v-on:click="hideContact">cancel</button>
+                                </div>
+                            </div>
+                            <button class="btn" v-if="sel_project!=-1" v-on:click.stop="hideProject">hide project</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" v-if="sel_class!=-1" v-on:click.stop="hideClass">hide projects</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{if 'message' in globals():}}
+<h2>{{=message}}</h2>
+<p class="lead">{{=T('How did you get here?')}}</p>
+<ol>
+    <li>{{=T('You are successfully running web2py')}}</li>
+    <li>{{=XML(T('You visited the url %s', A(request.env.path_info,_href=request.env.path_info)))}}</li>
+    <li>{{=XML(T('Which called the function %s located in the file %s',
+    (A(request.function+'()',_href='#'),
+    A('web2py/applications/%(application)s/controllers/%(controller)s.py' % request,
+    _href=URL('admin','default','peek', args=(request.application,'controllers',request.controller+'.py'))))))}}</li>
+    <li>{{=XML(T('The output of the file is a dictionary that was rendered by the view %s',
+    A('web2py/applications/%(application)s/views/%(controller)s/index.html' % request,
+    _href=URL('admin','default','peek',args=(request.application,'views',request.controller,'index.html')))))}}</li>
+    <li>{{=T('You can modify this application and adapt it to your needs')}}</li>
+</ol>
+{{elif 'content' in globals():}}
+{{=content}}
+{{else:}}
+{{=BEAUTIFY(response._vars)}}
+{{pass}}
+
+{{block right_sidebar}}
+<div id="profile" class="nested_el" v-if="is_show">
+    <button class="btn">hide profile</button>
+    <div class="nested_el">[insert profile pic]</div>
+    <span class="regular_el" v-for="(trait, index) in traits">${trait}</span>
+</div>
+{{end}}
+
+
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>
