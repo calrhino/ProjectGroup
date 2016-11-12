@@ -1,7 +1,7 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<div id="main-content">
+<div id="main_content">
     <header v-if="page=='welcome'" class="text-center">
         <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
         <button class="btn">Log Into Google</button>
@@ -47,6 +47,8 @@
             </div>
         </div>
     </div>
+
+
 </div>
 
 {{if 'message' in globals():}}
@@ -70,9 +72,16 @@
 {{=BEAUTIFY(response._vars)}}
 {{pass}}
 
+
 {{block right_sidebar}}
-<div id="profile" class="nested_el" v-if="is_show">
-    <button class="btn">hide profile</button>
+<div id="user_profile" class="nested_el" v-if="is_show">
+    <button class="btn" v-on:click="toggleViewing">hide profile</button>
+    <button class="btn" title="Delete is Disdabled" v-on:click="toggleDelete" v-if="!is_delete">enable delete</button>
+    <button class="btn" title="Delete is Enabled; Click on Traits to Delete" v-on:click="toggleDelete" v-if="is_delete">disable delete</button>
+    <button class="btn" v-on:click="toggleAdd" v-if="!is_add">add trait</button>
+    <button class="btn" v-on:click="toggleAdd" v-if="is_add">cancel</button>
+    <input type="text" v-if="is_add" v-model="trait_field">
+
     <div class="nested_el">[insert profile pic]</div>
     <span class="regular_el" v-for="(trait, index) in traits">${trait}</span>
 </div>

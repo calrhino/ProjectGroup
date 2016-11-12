@@ -2,17 +2,32 @@
  * Created by jarrett on 11/12/16.
  */
 
-var profile = new Vue({
-    el: "#profile",
+var user_profile = new Vue({
+    el: "#user_profile",
     delimiters: ['${', '}'],
     unsafeDelimiters: ['!{', '}'],
     data: {
         is_show: false,
-        is_edit: false,
+        is_delete: false,
+        is_add: false,
         traits: [],
-        suggested: []
+        suggested: [],
+        trait_field: '',
     },
     methods: {
+        toggleViewing: function () {
+            this.is_show = !this.is_show;
+        },
+        toggleDelete: function() {
+            this.is_delete = !this.is_delete;
+        },
+        toggleAdd: function () {
+            this.is_add = !this.is_add;
+            this.trait_field = '';
+        },
+        uploadPhoto: function (img) {
+
+        },
         addTrait: function (trait) {
             //TODO communicate submit with database
             $.post(add_trait_url, {
@@ -39,7 +54,7 @@ var profile = new Vue({
 });
 
 var main_content = new Vue({
-    el: "#main-content",
+    el: "#main_content",
     delimiters: ['${', '}'],
     unsafeDelimiters: ['!{', '}'],
     data: {
