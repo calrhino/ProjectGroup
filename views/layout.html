@@ -20,6 +20,11 @@
     <!-- Speaking of Google, don't forget to set your site up:
          http://google.com/webmasters -->
     <meta name="google-site-verification" content="">
+
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="813620946868-6rgvivu3gnp782a4dv14uiml1b2m2ks4.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
     <!-- include stylesheets -->
     <link rel="stylesheet" href="{{=URL('static','css/bootstrap.min.css')}}"/>
     <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3.css')}}"/>
@@ -47,6 +52,8 @@ middle_column = {0: mc0, 1: mc1, 2: mc2}[
 }}
 </head>
 <body>
+    <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+
 <!--[if lt IE 8]><p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 <div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
@@ -132,5 +139,22 @@ middle_column = {0: mc0, 1: mc1, 2: mc2}[
 {{pass}}
 <!-- Share ============================y============ -->
 <script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script>
+<!-- Google Login -->
+<script>
+    function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+</script>
 </body>
 </html>
