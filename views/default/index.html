@@ -1,9 +1,6 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<script src="{{=URL('static', 'js/vue.js')}}"></script>
-
-
 <div id="main-content">
     <header v-if="page=='welcome'" class="text-center">
         <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
@@ -80,6 +77,3 @@
     <span class="regular_el" v-for="(trait, index) in traits">${trait}</span>
 </div>
 {{end}}
-
-
-<script src="{{=URL('static', 'js/default_index.js')}}"></script>
