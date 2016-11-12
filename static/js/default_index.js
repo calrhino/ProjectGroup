@@ -11,6 +11,7 @@ var user_profile = new Vue({
         is_delete: false,
         is_add: false,
         traits: [],
+        imglink: '',
         suggested: [],
         trait_field: '',
     },
@@ -24,9 +25,6 @@ var user_profile = new Vue({
         toggleAdd: function () {
             this.is_add = !this.is_add;
             this.trait_field = '';
-        },
-        uploadPhoto: function (img) {
-
         },
         addTrait: function (trait) {
             //TODO communicate submit with database
@@ -48,6 +46,8 @@ var user_profile = new Vue({
         getTraits: function (idx) {
             $getJSON(get_traits_url, function (data) {
                 this.traits = data.traits;
+                this.imglink = data.imglink;
+                this.suggested = data.suggested;
             });
         }
     }
