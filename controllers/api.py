@@ -1,45 +1,68 @@
 @auth.requires_signature()
-def add_class():
-    request.vars.join_class
- def add_post():
-     """Here you get a new post and add it.  Return what you want."""
-     p_id = db.post.insert(post_content=request.vars.content)
-     p = db.post(p_id)
-     return response.json(dict(post=response_post(p)))
+def add_student():
+    auth_id = request.vars.auth_id
+    db(db.students).insert(google_auth_id=auth_id)
+    return 'add student success'
 
 
- @auth.requires_signature()
- def del_post():
-     """Used to delete a post."""
-     id = int(request.vars.post_id) if request.vars.post_id is not None else 0
-     del db.post[request.vars.post_id]
-     return response.json("delete ok")
+@auth.requires_signature()
+def delete_student():
+    auth_id = request.vars.auth_id
+    db(db.students.google_auth_id == auth_id).delete()
+    return 'delete student success'
 
- @auth.requires_signature()
- def edi_post():
-     """Take existing post and edit it."""
-     id = int(request.vars.post_id) if request.vars.post_id is not None else 0
-     db.post[id] = dict(post_content = request.vars.content)
-     p = db.post(id)
-     return response.json(dict(updated_on=p.updated_on))
 
- # Helper Functions:
- def response_post(p):
-     """Correctly create a post intended for the client"""
-     return dict(
-         id=p.id,
-         user=get_user_name_from_email(p.user_email),
-         content=p.post_content,
-         created_on=p.created_on,
-         updated_on=p.updated_on if p.updated_on != p.created_on else None,
-         is_user=True if auth.user and auth.user.email == p.user_email else False,
-         is_edit=False,
-         edit_field=p.post_content,
-     )
+@auth.requires_signature()
+def create_class():
+    name = request.vars.name
+    description = request.vars.description
+    db(db.classes).insert(name=name, description=description)
+    return 'create class success'
 
- def get_user_name_from_email(email):
-     u = db(db.auth_user.email == email).select().first()
-     if u is None:
-         return 'None'
-     else:
-         return ' '.join([u.first_name, u.last_name])
+
+@auth.requires_signature()
+def join_class():
+    class_id = request.vars.class_id
+    auth_id = request.vars.auth_id
+    db(db.students.google_auth_id == auth_id).insert(db.classes[class_id])
+    return 'add class success'
+
+
+@auth.requires_signature()
+def delete_class():
+    class_id = request.vars.class_id
+    db(db.classes.id == class_id).delete()
+    return 'delete class success'
+
+@auth.requires_signature()
+def create_project():
+    auth_id = request.vars.auth_id
+    class_id = request.vars.class_id
+    name = request.vars.name
+    description = request.vars.description
+
+    db(db.projects).insert(name=name, description=description)
+    project_id = db(db.projects).select(sortby=~id).first().id
+    db(db.classes.id == class_id).insert(db(db.projects.id == project_id))
+    db(db.proj_students.id == project_id).insert(db(db.students.google_auth_id == auth_id).select())
+    return 'create project success'
+
+
+@auth.requires_signature()
+def join_project():
+    project_id = request.vars.project_id
+    auth_id = request.vars.auth_id
+    db(db.proj_students.id == project_id).insert(db(db.students.google_auth_id == auth_id).select())
+    return 'join project success'
+
+
+@auth.requires_signature()
+def leave_project():
+    project_id = request.vars.project_id
+    auth_id = request.vars.auth_id
+    db(db.proj_students.id == project_id and db.proj_students.students.google_auth_id == auth_id).delete()
+    if (db(db.proj_students.id == project_id).select() is None):
+        db(db.projects.id == project_id).select().delete()
+        db(db.proj_students.id == project_id).select().delete()
+        return 'leave and remove project success'
+    return 'leave project success'
