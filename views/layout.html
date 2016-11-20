@@ -151,10 +151,26 @@ middle_column = {0: mc0, 1: mc1, 2: mc2}[
         console.log("Image URL: " + profile.getImageUrl());
         console.log("Email: " + profile.getEmail());
 
+        // $.post(logged_in_url,
+        //     {
+        //         // user_id: profile.getId();
+        //         user_first: BasicProfile.getGivenName()
+        //         user_last: BasicProfile.getFamilyName()
+        //         user_image_link: BasicProfile.getImageUrl()
+        //         user_email: BasicProfile.getEmail()
+        //     }
+        // )
+
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       };
+</script>
+
+<script>
+$(document).ready(function(){
+    $("g-signin2").show();
+});
 </script>
 </body>
 </html>

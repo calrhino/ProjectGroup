@@ -1,13 +1,38 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
+
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>  
+<script>
+    var logged_in_url = "{{=URL('api', 'logged_in', user_signature=True)}}";
+    var add_student_url = "{{=URL('api', 'add_student', user_signature=True)}}";
+    var delete_student_url = "{{=URL('api', 'delete_student', user_signature=True)}}";
+    var create_class_url = "{{=URL('api', 'create_class', user_signature=True)}}";
+    var join_class_url = "{{=URL('api', 'join_class', user_signature=True)}}";
+    var delete_class_url = "{{=URL('api', 'delete_class', user_signature=True)}}";
+    var create_project_url = "{{=URL('api', 'create_project', user_signature=True)}}";
+    var join_project_url = "{{=URL('api', 'join_project', user_signature=True)}}";
+    var leave_project_url = "{{=URL('api', 'leave_project', user_signature=True)}}";
+</script>
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+{{end}}
 
 <div id="main_content">
     <header v-if="page=='welcome'" class="text-center">
         <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
-        <button class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></button>
+        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
+        <div v-on:click="setPage('loggedin')" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" style="center"></div>
+        <a href="#" onclick="signOut();">Sign out</a>
     </header>
 
     <div v-if="page=='loggedin'">
+    <!-- <div v-if="logged_in"> -->
         <div v-for="(classe, class_idx) in classes">
             <div class="nested_el row" v-on:click="toggleClass(class_idx)" v-if="sel_class==-1||sel_class==class_idx">
                 <div class="nopad">Class</div>
@@ -51,7 +76,7 @@
 
 </div>
 
-{{if 'message' in globals():}}
+<!-- {{if 'message' in globals():}}
 <h2>{{=message}}</h2>
 <p class="lead">{{=T('How did you get here?')}}</p>
 <ol>
@@ -71,7 +96,7 @@
 {{else:}}
 {{=BEAUTIFY(response._vars)}}
 {{pass}}
-
+ -->
 
 {{block right_sidebar}}
 <div id="user_profile" class="nested_el" v-if="is_show">
@@ -86,3 +111,4 @@
     <span class="regular_el" v-for="(trait, index) in traits">${trait}</span>
 </div>
 {{end}}
+

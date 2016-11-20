@@ -1,3 +1,10 @@
+# API.py
+
+def logged_in():
+    print "logged in"
+    page = loggedin
+    return
+    
 @auth.requires_signature()
 def add_student():
     auth_id = request.vars.auth_id
