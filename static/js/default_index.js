@@ -116,6 +116,8 @@ var main_content = new Vue({
             if (this.page == page) return;
             this.page = page;
         },
+
+        //Functions to Control Visuals
         toggleClass: function (idx) {
             if (this.sel_class == idx)
                 this.sel_class = -1;
@@ -156,6 +158,7 @@ var main_content = new Vue({
         clearMessage: function () {
             this.user_message = '';
         },
+
         contactMember: function (idx) {
             if (idx < 0) {
                 //TODO contact all members
@@ -163,71 +166,6 @@ var main_content = new Vue({
                 //TODO contact specific member
             }
         }
-// 2500 durant apt 301
-
     },
-    /*components: {
-     'project-template': {
-     delimiters: ['${', '}'],
-     unsafeDelimiters: ['!{', '}'],
-     props: ['data', 'project_idx', 'sel_project'],
-     template: "\
-     <div>${data.name} ${data.description}\
-     <button class='btn' v-on:click='$emit(\"show_more\")'>Show More</button>\
-     <div v-for='member in data.members'>\
-     ${member}</div>\
-     ",
-     },
-     'class-template': {
-     delimiters: ['${', '}'],
-     unsafeDelimiters: ['!{', '}'],
-     props: ['data', 'class_idx', 'sel_class', 'sel_project'],
-     data: function () {
-     return {
-     name: this.data.name,
-     description: this.data.description,
-     };
-     },
-     template: "\
-     <div>${name} ${description}\
-     <button class='btn' v-on:click='$emit(\"show_more\")'>Show More</button>\
-     <div v-if='sel_class==class_idx'><project-template\
-     v-for='(project, project_idx) in data.projects'\
-     :data='project.data'\
-     :project_idx='project_idx'\
-     :sel_project='sel_project'\
-     v-on:show_more='showProject(class_idx, project_idx)'\
-     ></project-template>\
-     </div>\
-     ",
-     }
-     }*/
 });
-
-
-/*Vue.component('project-template', {
- props: ['data', 'project_idx', 'sel_project'],
- template: "\
- <div>{{data.name}} {{data.description}}\
- <button class='btn' v-on:click='$emit(\"show_more\")'>Show More</button>\
- <div v-for='member in data.members'>\
- ${member}</div>\
- ",
- });
-
- Vue.component('class-template', {
- props: ['data', 'class_idx', 'sel_class', 'sel_project'],
- template: "\
- <div>{{data.name}} {{data.description}}\
- <button class='btn' v-on:click='$emit(\"show_more\")'>Show More</button>\
- <div v-if='sel_class==class_idx'><project-template\
- v-for='(project, project_idx) in data.projects'\
- :data='project.data'\
- :project_idx='project_idx'\
- :sel_project='sel_project'\
- v-on:show_more='showProject(class_idx, project_idx)'\
- ></project-template>\
- </div>\
- ",
- });*/
 
