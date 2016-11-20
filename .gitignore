@@ -1,3 +1,10 @@
+progress.log
+cache/*
+databases/*
+errors/*
+*.pyc
+*.bak
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
