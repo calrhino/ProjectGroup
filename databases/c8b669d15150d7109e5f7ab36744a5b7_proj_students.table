@@ -2,20 +2,20 @@
 S'students'
 p2
 (dp3
-S'length'
+S'sortable'
 p4
-I512
-sS'unique'
-p5
-I00
-sS'sortable'
-p6
 I2
 sS'sql'
-p7
+p5
 S'INTEGER REFERENCES students (id) ON DELETE CASCADE  '
-p8
+p6
+sS'length'
+p7
+I512
 sS'notnull'
+p8
+I00
+sS'unique'
 p9
 I00
 sS'type'
@@ -25,20 +25,20 @@ p11
 ssS'student_id'
 p12
 (dp13
-S'sortable'
+S'length'
 p14
-I3
-sS'sql'
-p15
-S'INTEGER REFERENCES students (id) ON DELETE CASCADE  '
-p16
-sS'length'
-p17
 I512
-sS'notnull'
-p18
-I00
 sS'unique'
+p15
+I00
+sS'sortable'
+p16
+I2
+sS'sql'
+p17
+S'INTEGER REFERENCES students (id) ON DELETE CASCADE  '
+p18
+sS'notnull'
 p19
 I00
 sS'type'
@@ -48,35 +48,41 @@ p21
 ssS'project_id'
 p22
 (dp23
-g14
-I2
-sg15
-S'INTEGER REFERENCES projects (id) ON DELETE CASCADE  '
+S'sortable'
 p24
-sg17
+I2
+sS'sql'
+p25
+S'INTEGER REFERENCES projects (id) ON DELETE CASCADE  '
+p26
+sS'length'
+p27
 I512
-sg18
+sS'notnull'
+p28
 I00
+sS'unique'
+p29
+I00
+sS'type'
+p30
+S'reference projects'
+p31
+ssS'id'
+p32
+(dp33
+g14
+I512
+sg15
+I00
+sg16
+I1
+sg17
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p34
 sg19
 I00
 sg20
-S'reference projects'
-p25
-ssS'id'
-p26
-(dp27
-g4
-I512
-sg5
-I00
-sg6
-I1
-sg7
-S'INTEGER PRIMARY KEY AUTOINCREMENT'
-p28
-sg9
-I00
-sg10
 S'id'
-p29
+p35
 ss.

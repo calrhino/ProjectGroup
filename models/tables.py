@@ -35,14 +35,14 @@ db.define_table('students',
                 )
 
 db.define_table('proj_students',
-                Field('students', 'reference students')
+                Field('student_id', 'reference students')
                 )
 
 
 
 
 
-db.proj_students.students.requires = IS_NOT_EMPTY()
+db.proj_students.student_id.requires = IS_NOT_EMPTY()
 db.students.google_auth_id.requires = IS_NOT_EMPTY()
 db.projects.name.requires = IS_NOT_EMPTY()
 db.classes.name.requires = IS_NOT_EMPTY()
