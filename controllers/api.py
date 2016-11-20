@@ -35,7 +35,7 @@ def get_students():
 # database insert and delete
 
 @auth.requires_login()
->>>>>>> 90c1aebe942475e38a516a1a4900c90f5121c7c3
+
 def add_student():
     """add a new student to the database"""
     auth_id = request.vars.auth_id
