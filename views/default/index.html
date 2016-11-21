@@ -4,7 +4,10 @@
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var logged_in_url = "{{=URL('api', 'logged_in', user_signature=True)}}";
-    var add_student_url = "{{=URL('api', 'add_student')}}";
+    var get_classes_url = "{{=URL('api', 'get_classes', user_signature=True)}}";
+    var get_projects_url = "{{=URL('api', 'get_projects', user_signature=True)}}";
+    var get_students_url = "{{=URL('api', 'get_students', user_signature=True)}}";
+    var add_student_url = "{{=URL('api', 'add_student', user_signature=True)}}";
     var delete_student_url = "{{=URL('api', 'delete_student', user_signature=True)}}";
     var create_class_url = "{{=URL('api', 'create_class', user_signature=True)}}";
     var leave_class_url = "{{=URL('api', 'leave_class', user_signature=True)}}";
@@ -118,3 +121,5 @@ _href=URL('admin','default','peek',args=(request.application,'views',request.con
 </div>
 {{end}}
 
+<script src="{{=URL('static','js/default_index.js')}}"></script>
+<script src="{{=URL('static','js/API_calls.js')}}"></script>

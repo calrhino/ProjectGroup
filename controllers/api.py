@@ -2,10 +2,12 @@
 def get_classes():
     """get the classes associated with a student"""
     student = get_student(request.vars.auth_id)
+    pr(student)
     classes = db(db.stud_classes.student_id==student.id).select()
+    pr(classes)
     response_classes = []
-    for i, c in enumerate(classes):
-        response_classes.append(response_class(c))
+    for i, cref in enumerate(classes):
+        response_classes.append(response_class(cref.class_id))
     return response.json(dict(classes=response_classes))
 
 
@@ -13,6 +15,7 @@ def get_classes():
 def get_projects():
     """get the projects associated with a class"""
     projects = db(db.projects.class_id==request.vars.class_id).select()
+    pr(projects)
     response_projects = []
     for i, p in enumerate(projects):
         response_projects.append(response_project(p))
@@ -23,9 +26,10 @@ def get_projects():
 def get_students():
     """get the students associated with a project"""
     students = db(db.proj_students.project_id==request.vars.project_id).select()
+    pr(students)
     response_students = []
-    for i, s in enumerate(students):
-        response_students.append(response_student(s))
+    for i, sref in enumerate(students):
+        response_students.append(response_student(sref.student_id))
     return response.json(dict(students=response_students))
 
 
