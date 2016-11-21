@@ -1,11 +1,13 @@
+# database retrieve information for client ------
+
 @auth.requires_login()
 def get_classes():
     """get the classes associated with a student"""
+    # select all relations between students and classes for particular student
     student = get_student(request.vars.auth_id)
-    pr(student)
     classes = db(db.stud_classes.student_id==student.id).select()
-    pr(classes)
     response_classes = []
+    # get class from each relation (classes of student)
     for i, cref in enumerate(classes):
         response_classes.append(response_class(cref.class_id))
     return response.json(dict(classes=response_classes))
@@ -14,9 +16,10 @@ def get_classes():
 @auth.requires_login()
 def get_projects():
     """get the projects associated with a class"""
+    # select all projects for a class
     projects = db(db.projects.class_id==request.vars.class_id).select()
-    pr(projects)
     response_projects = []
+    # projects are only associated to one class per
     for i, p in enumerate(projects):
         response_projects.append(response_project(p))
     return response.json(dict(projects=response_projects))
@@ -25,15 +28,15 @@ def get_projects():
 @auth.requires_login()
 def get_students():
     """get the students associated with a project"""
+    # select all relations between projects and students for particular project
     students = db(db.proj_students.project_id==request.vars.project_id).select()
-    pr(students)
     response_students = []
+    # get student from each relation (members of project)
     for i, sref in enumerate(students):
         response_students.append(response_student(sref.student_id))
     return response.json(dict(students=response_students))
 
-
-# database insert and delete ------------------
+# database insert and delete --------------------
 
 @auth.requires_login()
 def add_student():
@@ -53,7 +56,7 @@ def delete_student():
 
 @auth.requires_login()
 def create_class():
-    """create a class to the database"""
+    """a student creates a class and is the 'instructor'"""
     name = request.vars.name
     description = request.vars.description
     instructor = get_student(request.vars.auth_id)
@@ -61,7 +64,6 @@ def create_class():
     class_id = db.classes.insert(name=name, description=description, instructor_id=instructor.id)
     db.stud_classes.insert(student_id=instructor.id, class_id=class_id)
     return response.json('create class success')
-
 
 @auth.requires_login()
 def join_class():
@@ -91,7 +93,7 @@ def delete_class():
 
 @auth.requires_login()
 def create_project():
-    """a student creates a project in the database"""
+    """a student creates a project and is the 'leader'"""
     class_id = request.vars.class_id
     name = request.vars.name
     description = request.vars.description
@@ -112,7 +114,7 @@ def join_project():
 
 @auth.requires_login()
 def leave_project():
-    """a student leaves a project"""
+    """a student leaves a project and autodetect 0 members for deletion (TODO)"""
     project_id = request.vars.project_id
     student = get_student(request.vars.auth_id)
     db(db.proj_students.project_id==project_id and db.proj_students.student_id==student.id).delete()
@@ -122,6 +124,7 @@ def leave_project():
         return response.json('leave and remove project success')
     return response.json('leave project success')
 
+# get student for google_auth_id
 def get_student(auth_id):
     return db(db.students.google_auth_id == auth_id).select().first()
 
@@ -149,7 +152,6 @@ def response_student(s):
     return dict(
         auth_id=s.google_auth_id,
     )
-
 
 def pr(msg):
     print(msg)
