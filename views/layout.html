@@ -22,7 +22,8 @@
     <meta name="google-site-verification" content="">
 
     <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="813620946868-6rgvivu3gnp782a4dv14uiml1b2m2ks4.apps.googleusercontent.com">
+    <meta name="google-signin-client_id"
+          content="813620946868-6rgvivu3gnp782a4dv14uiml1b2m2ks4.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <!-- include stylesheets -->
@@ -52,7 +53,7 @@ middle_column = {0: mc0, 1: mc1, 2: mc2}[
 }}
 </head>
 <body>
-    <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+<!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
 
 <!--[if lt IE 8]><p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -165,13 +166,14 @@ middle_column = {0: mc0, 1: mc1, 2: mc2}[
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
-      };
+    }
+    ;
 </script>
 
 <script>
-$(document).ready(function(){
-    $("g-signin2").show();
-});
+    $(document).ready(function () {
+        $("g-signin2").show();
+    });
 </script>
 </body>
 </html>

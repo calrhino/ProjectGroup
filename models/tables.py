@@ -18,40 +18,35 @@ db.define_table('google_auth',
                 Field('user_id_token', 'string')
                 )
 
-db.define_table('projects',
-                Field('name', 'text'),
-                Field('description', 'text', default=''),
+db.define_table('students',
+                Field('google_auth_id', 'integer'),
                 )
 
 db.define_table('classes',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
-                Field('project_id', 'reference projects', default=None),
+                Field('instructor_id', 'reference students')
                 )
 
-db.define_table('students',
-                Field('class_id', 'reference classes', default=None),
-                Field('google_auth_id', 'text'),
+db.define_table('projects',
+                Field('name', 'text'),
+                Field('description', 'text', default=''),
+                Field('leader_id', 'reference students'),
+                Field('class_id', 'reference classes')
                 )
 
 db.define_table('proj_students',
+                Field('project_id', 'reference projects'),
                 Field('student_id', 'reference students')
                 )
 
-
-
+db.define_table('stud_classes',
+                Field('student_id', 'reference students'),
+                Field('class_id', 'reference classes')
+                )
 
 
 db.proj_students.student_id.requires = IS_NOT_EMPTY()
 db.students.google_auth_id.requires = IS_NOT_EMPTY()
 db.projects.name.requires = IS_NOT_EMPTY()
 db.classes.name.requires = IS_NOT_EMPTY()
-
-# I don't want to display the user email by default in all forms.
-# db.post.user_email.readable = db.post.user_email.writable = False
-# db.post.post_content.requires = IS_NOT_EMPTY()
-# db.post.created_on.readable = db.post.created_on.writable = False
-# db.post.updated_on.readable = db.post.updated_on.writable = False
-
-# after defining tables, uncomment below to enable auditing
-# auth.enable_record_versioning(db)

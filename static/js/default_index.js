@@ -19,7 +19,7 @@ var user_profile = new Vue({
         toggleViewing: function () {
             this.is_show = !this.is_show;
         },
-        toggleDelete: function() {
+        toggleDelete: function () {
             this.is_delete = !this.is_delete;
         },
         toggleAdd: function () {
