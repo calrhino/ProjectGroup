@@ -39,6 +39,10 @@ def user():
     """
     return dict(form=auth())
 
+def welcome():
+    
+    response.flash = T("Hello World")
+    return dict(message=T('Welcome to web2py!'))
 
 @cache.action()
 def download():
