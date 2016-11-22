@@ -19,7 +19,7 @@ var user_profile = new Vue({
         toggleViewing: function () {
             this.is_show = !this.is_show;
         },
-        toggleDelete: function() {
+        toggleDelete: function () {
             this.is_delete = !this.is_delete;
         },
         toggleAdd: function () {
@@ -159,6 +159,33 @@ var main_content = new Vue({
             this.user_message = '';
         },
 
+        getClasses: function(auth_id) {
+            $.post(get_classes_url,
+                {
+                    auth_id:auth_id,
+                }, function(data) {
+                    console.log(data);
+                }
+            );
+        },
+        getProjects: function(class_id) {
+            $.post(get_projects_url,
+                {
+                    class_id:class_id,
+                }, function(data) {
+                    console.log(data);
+                }
+            );
+        },
+        getStudents: function(project_id) {
+            $.post(get_students_url,
+                {
+                    project_id:project_id
+                }, function(data) {
+                    console.log(data);
+                }
+            );
+        },
         contactMember: function (idx) {
             if (idx < 0) {
                 //TODO contact all members
