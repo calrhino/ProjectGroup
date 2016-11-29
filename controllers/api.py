@@ -5,7 +5,7 @@ def get_classes():
     """get the classes associated with a student"""
     # select all relations between students and classes for particular student
     student = get_student(request.vars.auth_id)
-    classes = db(db.stud_classes.student_id==student.id).select()
+    classes = db(db.class_students.student_id==student.id).select()
     response_classes = []
     # get class from each relation (classes of student)
     for i, cref in enumerate(classes):
@@ -14,24 +14,24 @@ def get_classes():
 
 
 @auth.requires_login()
-def get_projects():
-    """get the projects associated with a class"""
-    # select all projects for a class
-    projects = db(db.projects.class_id==request.vars.class_id).select()
-    response_projects = []
-    # projects are only associated to one class per
-    for i, p in enumerate(projects):
-        response_projects.append(response_project(p))
-    return response.json(dict(projects=response_projects))
+def get_groups():
+    """get the groups associated with a class"""
+    # select all groups for a class
+    groups = db(db.groups.class_id==request.vars.class_id).select()
+    response_groups = []
+    # groups are only associated to one class per
+    for i, p in enumerate(groups):
+        response_groups.append(response_group(p))
+    return response.json(dict(groups=response_groups))
 
 
 @auth.requires_login()
 def get_students():
-    """get the students associated with a project"""
-    # select all relations between projects and students for particular project
-    students = db(db.proj_students.project_id==request.vars.project_id).select()
+    """get the students associated with a group"""
+    # select all relations between groups and students for particular group
+    students = db(db.group_students.group_id==request.vars.group_id).select()
     response_students = []
-    # get student from each relation (members of project)
+    # get student from each relation (members of group)
     for i, sref in enumerate(students):
         response_students.append(response_student(sref.student_id))
     return response.json(dict(students=response_students))
@@ -53,7 +53,7 @@ def delete_student():
     db(db.students.google_auth_id == auth_id).delete()
     return response.json('delete student success')
 
-
+# class api calls -------------------------------
 @auth.requires_login()
 def create_class():
     """a student creates a class and is the 'instructor'"""
@@ -62,15 +62,15 @@ def create_class():
     instructor = get_student(request.vars.auth_id)
 
     class_id = db.classes.insert(name=name, description=description, instructor_id=instructor.id)
-    db.stud_classes.insert(student_id=instructor.id, class_id=class_id)
+    db.class_students.insert(student_id=instructor.id, class_id=class_id)
     return response.json('create class success')
 
 @auth.requires_login()
 def join_class():
-    """a student joins a class"""
+    """a student joins a project"""
     class_id = request.vars.class_id
     student = get_student(request.vars.auth_id)
-    db.stud_classes.insert(student_id=student.id, class_id=class_id)
+    db.class_students.insert(student_id=student.id, class_id=class_id)
     return response.json('add class success')
 
 
@@ -79,9 +79,8 @@ def leave_class():
     """a student leaves a class"""
     class_id = request.vars.class_id
     student = get_student(request.vars.auth_id)
-    db(db.stud_classes.student_id == student.id and db.stud_classes.class_id == class_id).delete()
+    db(db.class_students.student_id == student.id and db.class_students.class_id == class_id).delete()
     return response.json('leave class success')
-
 
 @auth.requires_login()
 def delete_class():
@@ -90,19 +89,19 @@ def delete_class():
     db(db.classes.id == class_id).delete()
     return response.json('delete class success')
 
-
+# project api calls -----------------------------
 @auth.requires_login()
 def create_project():
-    """a student creates a project and is the 'leader'"""
+    """only instructor of class may create project"""
     class_id = request.vars.class_id
+    instructor = get_student(request.vars.auth_id)
+    if (instructor is not db(db.classes.id == class_id).select().first().student_id):
+        return response.json('invalid; not instructor')
     name = request.vars.name
     description = request.vars.description
-    leader = get_student(request.vars.auth_id)
 
-    project_id = db.projects.insert(name=name, description=description, leader_id=leader.id, class_id=class_id)
-    db.proj_students.insert(student_id=leader.id, project_id=project_id)
-    return response.json('create project success')
-
+    project_id = db.projects.insert(name=name, description=description, class_id=class_id)
+    return response.json('create class success')
 
 @auth.requires_login()
 def join_project():
@@ -110,19 +109,64 @@ def join_project():
     project_id = request.vars.project_id
     student = get_student(request.vars.auth_id)
     db.proj_students.insert(student_id=student.id, project_id=project_id)
-    return response.json('join project success')
+    return response.json('add class success')
 
 @auth.requires_login()
 def leave_project():
-    """a student leaves a project and autodetect 0 members for deletion (TODO)"""
+    """a student leaves a project"""
     project_id = request.vars.project_id
     student = get_student(request.vars.auth_id)
-    db(db.proj_students.project_id==project_id and db.proj_students.student_id==student.id).delete()
+    db(db.proj_students.student_id == student.id and db.proj_students.project_id == project_id).delete()
+    return response.json('leave class success')
 
-    if (db(db.proj_students.project_id == project_id).select() is None):
-        db(db.projects.id == project_id).delete()
-        return response.json('leave and remove project success')
-    return response.json('leave project success')
+
+@auth.requires_login()
+def delete_project():
+    """delete a project"""
+    project_id = request.vars.project_id
+    db(db.projects.id == project_id).delete()
+    return response.json('delete class success')
+
+# group api calls -------------------------------
+@auth.requires_login()
+def create_group():
+    """a student creates a group and is the 'leader'"""
+    project_id = request.vars.project_id
+    name = request.vars.name
+    description = request.vars.description
+    leader = get_student(request.vars.auth_id)
+
+    group_id = db.groups.insert(name=name, description=description, leader_id=leader.id, class_id=class_id)
+    db.group_students.insert(student_id=leader.id, group_id=group_id)
+    return response.json('create group success')
+
+@auth.requires_login()
+def join_group():
+    """a student joins a group"""
+    group_id = request.vars.group_id
+    student = get_student(request.vars.auth_id)
+    db.group_students.insert(student_id=student.id, group_id=group_id)
+    return response.json('join group success')
+
+@auth.requires_login()
+def leave_group():
+    """a student leaves a group and autodetect 0 members for deletion"""
+    group_id = request.vars.group_id
+    student = get_student(request.vars.auth_id)
+    db(db.group_students.group_id==group_id and db.group_students.student_id==student.id).delete()
+
+    print db(db.group_students.group_id == group_id).select()
+    if (db(db.group_students.group_id == group_id).select() is None):
+        db(db.groups.id == group_id).delete()
+        return response.json('leave and remove group success')
+    return response.json('leave group success')
+
+@auth.requires_login()
+def delete_group():
+    """delete a class"""
+    group_id = request.vars.group_id
+    db(db.groups.id == group_id).delete()
+    return response.json('delete class success')
 
 # get student for google_auth_id
 def get_student(auth_id):
@@ -135,11 +179,11 @@ def response_class(c):
         id=c.id,
         description=c.description,
         name=c.name,
-        projects=[],
+        groups=[],
     )
 
 
-def response_project(p):
+def response_group(p):
     return dict(
         id=p.id,
         description=p.description,

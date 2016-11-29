@@ -63,6 +63,7 @@ var main_content = new Vue({
         auth_id: '',
         sel_class: -1,
         sel_project: -1,
+        sel_group: -1,
         sel_member: -1,
         is_contact: false,
         user_message: '',
@@ -72,19 +73,47 @@ var main_content = new Vue({
                 description: 'testing',
                 projects: [
                     {
-                        name: 'project11',
-                        description: '1first',
-                        members: [
-                            'potato-chan',
-                            'potaoto-san'
+                        name: 'project1',
+                        description: '5 people max',
+                        groups: [
+                            {
+                                name: 'group11',
+                                description: '1first',
+                                members: [
+                                    'potato-chan',
+                                    'potaoto-san'
+                                ]
+                            },
+                            {
+                                name: 'group12',
+                                description: '1second',
+                                members: [
+                                    'asdf2',
+                                    'fdsa2'
+                                ]
+                            }
                         ]
                     },
                     {
-                        name: 'project12',
-                        description: '1second',
-                        members: [
-                            'asdf2',
-                            'fdsa2'
+                        name: 'project2',
+                        description: 'potato',
+                        groups: [
+                            {
+                                name: 'group21',
+                                description: '2first',
+                                members: [
+                                    'potato-chan',
+                                    'potaoto-san'
+                                ]
+                            },
+                            {
+                                name: 'group22',
+                                description: '2second',
+                                members: [
+                                    'asdf2',
+                                    'fdsa2'
+                                ]
+                            }
                         ]
                     }
                 ]
@@ -92,16 +121,16 @@ var main_content = new Vue({
             {
                 name: 'testclass_007',
                 description: 'secret_spy',
-                projects: [
+                groups: [
                     {
-                        name: 'project-goldeneye',
+                        name: 'group-goldeneye',
                         description: 'thing',
                         members: [
                             'bond'
                         ]
                     },
                     {
-                        name: 'project-casino',
+                        name: 'group-casino',
                         description: 'boom',
                         members: [
                             'bond'
@@ -130,6 +159,12 @@ var main_content = new Vue({
             else
                 this.sel_project = idx;
         },
+        toggleGroup: function (idx) {
+            if (this.sel_group == idx)
+                this.sel_group = -1;
+            else
+                this.sel_group = idx;
+        },
         toggleMember: function (idx) {
             if (this.sel_member == idx)
                 this.sel_member = -1;
@@ -141,10 +176,10 @@ var main_content = new Vue({
         },
         hideClass: function () {
             this.sel_class = -1;
-            this.hideProject();
+            this.hideGroup();
         },
-        hideProject: function () {
-            this.sel_project = -1;
+        hideGroup: function () {
+            this.sel_group = -1;
             this.showAllMember();
             this.hideContact();
         },
@@ -159,29 +194,29 @@ var main_content = new Vue({
             this.user_message = '';
         },
 
-        getClasses: function(auth_id) {
+        getClasses: function (auth_id) {
             $.post(get_classes_url,
                 {
-                    auth_id:auth_id,
-                }, function(data) {
+                    auth_id: auth_id,
+                }, function (data) {
                     console.log(data);
                 }
             );
         },
-        getProjects: function(class_id) {
-            $.post(get_projects_url,
+        getGroups: function (class_id) {
+            $.post(get_groups_url,
                 {
-                    class_id:class_id,
-                }, function(data) {
+                    class_id: class_id,
+                }, function (data) {
                     console.log(data);
                 }
             );
         },
-        getStudents: function(project_id) {
+        getStudents: function (group_id) {
             $.post(get_students_url,
                 {
-                    project_id:project_id
-                }, function(data) {
+                    group_id: group_id
+                }, function (data) {
                     console.log(data);
                 }
             );

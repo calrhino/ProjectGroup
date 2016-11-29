@@ -10,7 +10,7 @@ p5
 I00
 sS'sortable'
 p6
-I5
+I4
 sS'sql'
 p7
 S'INTEGER REFERENCES classes (id) ON DELETE CASCADE  '
@@ -22,22 +22,22 @@ sS'type'
 p10
 S'reference classes'
 p11
-ssS'leader_id'
+ssS'description'
 p12
 (dp13
 g4
-I512
+I32768
 sg5
 I00
 sg6
-I4
+I3
 sg7
-S'INTEGER REFERENCES students (id) ON DELETE CASCADE  '
+S'TEXT'
 p14
 sg9
 I00
 sg10
-S'reference students'
+S'text'
 p15
 ssS'id'
 p16
@@ -54,11 +54,10 @@ p18
 sg9
 I00
 sg10
-S'id'
-p19
+g16
 ssS'name'
-p20
-(dp21
+p19
+(dp20
 g4
 I32768
 sg5
@@ -67,26 +66,9 @@ sg6
 I2
 sg7
 S'TEXT'
-p22
+p21
 sg9
 I00
 sg10
-S'text'
-p23
-ssS'description'
-p24
-(dp25
-g4
-I32768
-sg5
-I00
-sg6
-I3
-sg7
-S'TEXT'
-p26
-sg9
-I00
-sg10
-g23
+g15
 ss.

@@ -31,8 +31,18 @@ db.define_table('classes',
 db.define_table('projects',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
+                Field('class_id', 'reference classes'))
+
+db.define_table('groups',
+                Field('name', 'text'),
+                Field('description', 'text', default=''),
                 Field('leader_id', 'reference students'),
-                Field('class_id', 'reference classes')
+                Field('project_id', 'reference projects')
+                )
+
+db.define_table('group_students',
+                Field('group_id', 'reference groups'),
+                Field('student_id', 'reference students')
                 )
 
 db.define_table('proj_students',
@@ -40,13 +50,12 @@ db.define_table('proj_students',
                 Field('student_id', 'reference students')
                 )
 
-db.define_table('stud_classes',
+db.define_table('class_students',
                 Field('student_id', 'reference students'),
                 Field('class_id', 'reference classes')
                 )
 
-
-db.proj_students.student_id.requires = IS_NOT_EMPTY()
 db.students.google_auth_id.requires = IS_NOT_EMPTY()
-db.projects.name.requires = IS_NOT_EMPTY()
+db.groups.name.requires = IS_NOT_EMPTY()
 db.classes.name.requires = IS_NOT_EMPTY()
+db.projects.name.requires = IS_NOT_EMPTY()
