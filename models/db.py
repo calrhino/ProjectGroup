@@ -111,6 +111,7 @@ auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Google Sign in
 from gluon.contrib.login_methods.oauth20_account import OAuthAccount
 from gluon.storage import Storage
 import os
@@ -131,7 +132,7 @@ class GoogleAccount(OAuthAccount):
         OAuthAccount.__init__(self, None, gai.client_id, gai.client_secret,
                               gai.auth_uri, gai.token_uri,
                               scope='https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-                              approval_prompt='force', state="auth_provider=google")
+                              approval_prompt='auto', state="auth_provider=google")
 
 
     def get_user(self):
@@ -159,7 +160,9 @@ class GoogleAccount(OAuthAccount):
                     username = username,
                     email = uinfo['email'])
 
+# auth.settings.login_next = URL('loggedin')
 auth.settings.login_form = GoogleAccount()
+
 
 # -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example

@@ -31,7 +31,10 @@
     <header v-if="page=='welcome'" class="text-center">
         <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
         <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
-        <div v-on:click="setPage('loggedin')" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <div v-on:click="setPage('loggedin')" style="text-align: center;">
+            <button onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';" id="loginButton"> Login with your Google Account </button>
+        </div>
+        <button v-on:click="setPage('loggedin')"> Go next </button>
     </header>
 
     <div v-if="page=='loggedin'">
