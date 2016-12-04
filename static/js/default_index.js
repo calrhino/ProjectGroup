@@ -66,6 +66,8 @@ var main_content = new Vue({
             is_contact: false,
             user_message: '',
             is_edit_status: false,
+            allclasses: [],
+            messages: [],
             classes: [
                 {
                     name: 'testclass_101',
@@ -128,11 +130,10 @@ var main_content = new Vue({
 
 
             getClasses: function () {
-                var array = main_content.classes;
                 $.post(get_classes_url,
                     {}, function (data) {
                         if (data.classes[0] != null)
-                            main_content.extend(array, data.classes);
+                            main_content.classes = data.classes;
                     }
                 );
             },
@@ -186,11 +187,32 @@ var main_content = new Vue({
                         group._pending = false;
                     })
             },
+            getAllClasses: function () {
+                $.post(get_all_classes_url,
+                    {}, function (data) {
+                        if (data.classes[0] != null)
+                            main_content.allclasses = data.classes;
+                    }
+                );
+            },
+            getMessages: function () {
+                $.post(get_messages_url,
+                    {}, function (data) {
+                        if (data.messages[0] != null)
+                            main_content.messages = data.messages;
+                    });
+            },
 
 
             setPage: function (page) {
                 if (this.page == page) return;
                 this.page = page;
+                if (page == 'loggedin')
+                    this.getClasses();
+                else if (page == 'joinclass')
+                    this.getAllClasses();
+                else if (page == 'mymessages')
+                    this.getMessages();
             },
 
             //Functions to Control Visuals
@@ -275,7 +297,11 @@ var main_content = new Vue({
                     contact_member(members[this.sel_member], this.user_message);
                 }
                 this.hideContact();
-            }
+            },
+
+            join_class: function (class_idx) {
+                join_class(this.allclasses[class_idx].id)
+            },
         },
     })
     ;

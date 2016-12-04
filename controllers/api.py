@@ -1,5 +1,32 @@
 # database retrieve information for client ------ -------------------------------------------------
 @auth.requires_login()
+def get_all_classes():
+    """get the classes not associated with a user"""
+    # exclude all relations between user and classes, pick remaining ones
+    # This is really ... not so good use of resources :(
+    classes = db(db.classes).select()
+    exclude = db(db.class_users.user_ref==auth.user).select()
+    for i, e in enumerate(exclude):
+        classes = classes.exclude(lambda row: row.id == e)
+    response_classes = []
+
+    # get class from each relation (classes of student)
+    for i, c in enumerate(classes):
+        response_classes.append(response_class(c))
+    return response.json(dict(classes=response_classes))
+
+@auth.requires_login()
+def get_messages():
+    """get the messages associated with a user"""
+    messages = db(db.messages.receiver_ref == auth.user).select()
+    response_messages = []
+
+    for i, m in enumerate(messages):
+        response_messages.append(response_message(m))
+    return response.json(dict(messages=response_messages))
+
+
+@auth.requires_login()
 def get_classes():
     """get the classes associated with a student"""
     # select all relations between user and classes for particular student
@@ -93,7 +120,7 @@ def join_class():
     class_id = request.vars.class_id
     student = auth.user
 
-    db.class_users.insert(student_ref=student, class_ref=db.classes[class_id])
+    db.class_users.insert(user_ref=student, class_ref=db.classes[class_id])
     return response.json('join class ' + class_id + ' success')
 
 
@@ -281,6 +308,16 @@ def response_member(s):
         id=s.id,
         name=s.first_name + ' ' + s.last_name,
         is_user=True if auth.user.id == s else False,
+    )
+
+
+def response_message(m):
+    sref = m.sender_ref
+    return dict(
+        id=m.id,
+        sender=sref.first_name + ' ' + sref.last_name,
+        sender_id=sref.id,
+        msg=m.msg,
     )
 
 def pr(msg):

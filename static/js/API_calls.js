@@ -12,6 +12,7 @@ function create_class(name, desc) {
 }
 
 function join_class(class_id) {
+    console.log(class_id);
     $.post(join_class_url, {
             class_id: class_id,
         }, function (msg) {
