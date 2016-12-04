@@ -1,3 +1,6 @@
+
+def get_user():
+
 @auth.requires_login()
 def get_classes():
     """get the classes associated with a student"""
