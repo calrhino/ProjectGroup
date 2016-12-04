@@ -219,8 +219,8 @@ var main_content = new Vue({
                 else {
                     if (this.classes[class_idx].projects[0] == null) {
                         this.getProjects(class_idx);
-                        this.sel_class = class_idx;
                     }
+                    this.sel_class = class_idx;
                 }
             },
             toggleProject: function (proj_idx, class_idx) {
@@ -229,8 +229,8 @@ var main_content = new Vue({
                 else {
                     if (this.classes[class_idx].projects[proj_idx].groups[0] == null) {
                         this.getGroups(class_idx, proj_idx);
-                        this.sel_project = proj_idx;
                     }
+                    this.sel_project = proj_idx;
                 }
             },
             toggleGroup: function (group_idx, proj_idx, class_idx) {
@@ -239,8 +239,8 @@ var main_content = new Vue({
                 else {
                     if (this.classes[class_idx].projects[proj_idx].groups[group_idx].members[0] == null) {
                         this.getMembers(class_idx, proj_idx, group_idx);
-                        this.sel_group = group_idx;
                     }
+                    this.sel_group = group_idx;
                 }
             },
             toggleMember: function (idx) {
