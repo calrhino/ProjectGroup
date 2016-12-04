@@ -131,7 +131,7 @@ class GoogleAccount(OAuthAccount):
         OAuthAccount.__init__(self, None, gai.client_id, gai.client_secret,
                               gai.auth_uri, gai.token_uri,
                               scope='https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-                              approval_prompt='force', state="auth_provider=google")
+                              approval_prompt='auto', state="auth_provider=google")
 
 
     def get_user(self):

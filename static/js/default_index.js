@@ -54,210 +54,215 @@ var user_profile = new Vue({
 });
 
 var main_content = new Vue({
-    el: "#main_content",
-    delimiters: ['${', '}'],
-    unsafeDelimiters: ['!{', '}'],
-    data: {
-        page: 'welcome',
-        google_auth: false,
-        auth_id: '',
-        sel_class: -1,
-        sel_project: -1,
-        sel_group: -1,
-        sel_member: -1,
-        is_contact: false,
-        user_message: '',
-        classes: [
-            {
-                name: 'testclass_101',
-                description: 'testing',
-                projects: [
-                    {
-                        name: 'project1',
-                        description: '5 people max',
-                        groups: [
-                            {
-                                name: 'group11',
-                                description: '1first',
-                                members: [
-                                    'potato-chan',
-                                    'potaoto-san'
-                                ]
-                            },
-                            {
-                                name: 'group12',
-                                description: '1second',
-                                members: [
-                                    'asdf2',
-                                    'fdsa2'
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        name: 'project2',
-                        description: 'potato',
-                        groups: [
-                            {
-                                name: 'group21',
-                                description: '2first',
-                                members: [
-                                    'potato-chan',
-                                    'potaoto-san'
-                                ]
-                            },
-                            {
-                                name: 'group22',
-                                description: '2second',
-                                members: [
-                                    'asdf2',
-                                    'fdsa2'
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                name: 'testclass_007',
-                description: 'secret_spy',
-                groups: [
-                    {
-                        name: 'group-goldeneye',
-                        description: 'thing',
-                        members: [
-                            'bond'
-                        ]
-                    },
-                    {
-                        name: 'group-casino',
-                        description: 'boom',
-                        members: [
-                            'bond'
-                        ]
-                    }
-                ]
-            },
-        ]
-    },
-    methods: {
-        setPage: function (page) {
-            if (this.page == page) return;
-            this.page = page;
+        el: "#main_content",
+        delimiters: ['${', '}'],
+        unsafeDelimiters: ['!{', '}'],
+        data: {
+            page: 'welcome',
+            google_auth: false,
+            auth_id: '',
+            sel_class: -1,
+            sel_project: -1,
+            sel_group: -1,
+            sel_member: -1,
+            is_contact: false,
+            user_message: '',
+            classes: [
+                {
+                    name: 'testclass_101',
+                    description: 'testing',
+                    projects: [
+                        {
+                            name: 'project1',
+                            description: '5 people max',
+                            groups: [
+                                {
+                                    name: 'group11',
+                                    description: '1first',
+                                    members: [
+                                        'potato-chan',
+                                        'potaoto-san'
+                                    ]
+                                },
+                                {
+                                    name: 'group12',
+                                    description: '1second',
+                                    members: [
+                                        'asdf2',
+                                        'fdsa2'
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'project2',
+                            description: 'potato',
+                            groups: [
+                                {
+                                    name: 'group21',
+                                    description: '2first',
+                                    members: [
+                                        'potato-chan',
+                                        'potaoto-san'
+                                    ]
+                                },
+                                {
+                                    name: 'group22',
+                                    description: '2second',
+                                    members: [
+                                        'asdf2',
+                                        'fdsa2'
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'testclass_007',
+                    description: 'secret_spy',
+                    groups: [
+                        {
+                            name: 'group-goldeneye',
+                            description: 'thing',
+                            members: [
+                                'bond'
+                            ]
+                        },
+                        {
+                            name: 'group-casino',
+                            description: 'boom',
+                            members: [
+                                'bond'
+                            ]
+                        }
+                    ]
+                },
+            ]
         },
+        methods: {
+            extend: function (a, b) {
+                for (var i = 0; i < b.length; i++) {
+                    a.push(b[i]);
+                }
+            },
 
-        //Functions to Control Visuals
-        toggleClass: function (idx) {
-            if (this.sel_class == idx)
-                this.hideClass();
-            else
-                this.sel_class = idx;
-        },
-        toggleProject: function (idx) {
-            if (this.sel_project == idx)
+            setPage: function (page) {
+                if (this.page == page) return;
+                this.page = page;
+            },
+
+            //Functions to Control Visuals
+            toggleClass: function (idx) {
+                if (this.sel_class == idx)
+                    this.hideClass();
+                else
+                    this.sel_class = idx;
+            },
+            toggleProject: function (idx) {
+                if (this.sel_project == idx)
+                    this.hideProject();
+                else
+                    this.sel_project = idx;
+            },
+            toggleGroup: function (idx) {
+                if (this.sel_group == idx)
+                    this.hideGroup();
+                else
+                    this.sel_group = idx;
+            },
+            toggleMember: function (idx) {
+                if (this.sel_member == idx)
+                    this.showAllMember()
+                else
+                    this.sel_member = idx;
+            },
+            showContact: function () {
+                this.is_contact = true;
+            },
+            hideClass: function () {
+                this.sel_class = -1;
                 this.hideProject();
-            else
-                this.sel_project = idx;
-        },
-        toggleGroup: function (idx) {
-            if (this.sel_group == idx)
+            },
+            hideProject: function () {
+                this.sel_project = -1;
                 this.hideGroup();
-            else
-                this.sel_group = idx;
-        },
-        toggleMember: function (idx) {
-            if (this.sel_member == idx)
-                this.showAllMember()
-            else
-                this.sel_member = idx;
-        },
-        showContact: function () {
-            this.is_contact = true;
-        },
-        hideClass: function () {
-            this.sel_class = -1;
-            this.hideProject();
-        },
-        hideProject: function () {
-            this.sel_project = -1;
-            this.hideGroup();
-        },
-        hideGroup: function () {
-            this.sel_group = -1;
-            this.showAllMember();
-            this.hideContact();
-        },
-        showAllMember: function () {
-            this.sel_member = -1;
-        },
-        hideContact: function () {
-            this.is_contact = false;
-            this.clearMessage();
-        },
-        clearMessage: function () {
-            this.user_message = '';
-        },
+            },
+            hideGroup: function () {
+                this.sel_group = -1;
+                this.showAllMember();
+                this.hideContact();
+            },
+            showAllMember: function () {
+                this.sel_member = -1;
+            },
+            hideContact: function () {
+                this.is_contact = false;
+                this.clearMessage();
+            },
+            clearMessage: function () {
+                this.user_message = '';
+            },
 
 
-        getClasses: function (auth_id) {
-            $.post(get_classes_url,
-                {
-                    auth_id: auth_id
-                }, function (data) {
-                    console.log(data);
-                    if (data.classes[0] != null)
-                        this.classes.append(data.classes);
-                }
-            );
-        },
-        getProjects: function (class_idx, class_id) {
-            $.post(get_projects_url,
-                {
-                    class_id: class_id
-                }, function (data) {
-                    console.log(data);
-                    this.classes[class_idx].projects.append(data.projects);
-                }
-            )
-        },
-        getGroups: function (class_idx, proj_idx, class_id) {
-            $.post(get_groups_url,
-                {
-                    class_id: class_id,
-                }, function (data) {
-                    console.log(data);
-                    this.classes[class_idx].projects[proj_idx].groups.append(data.groups);
-                }
-            );
-        },
-        getMembers: function (class_idx, proj_idx, group_idx, group_id) {
-            $.post(get_members_url,
-                {
-                    group_id: group_id
-                }, function (data) {
-                    console.log(data);
-                    this.classes[class_idx].projects[proj_idx].groups[group_idx].members.append(data.members);
-                }
-            );
-        },
-
-        initView: function (auth_id) {
-            $.post(add_student_url, {
-                    auth_id: auth_id
-                }, function (msg) {
-                    console.log(msg);
-                    main_content.getClasses(auth_id);
-                }
-            );
-        },
-
-        contactMember: function (idx) {
-            if (idx < 0) {
-                //TODO contact all members
-            } else {
-                //TODO contact specific member
+            getClasses: function (auth_id) {
+                var array = main_content.classes;
+                $.post(get_classes_url,
+                    {}, function (data) {
+                        if (data.classes[0] != null)
+                            main_content.extend(array, data.classes);
+                    }
+                );
             }
-        }
-    },
-});
+            ,
+            getProjects: function (class_idx) {
+                var class_arr = main_content.classes[class_idx];
+                $.post(get_projects_url,
+                    {
+                        class_id: class_arr.id
+                    }, function (data) {
+                        console.log(data);
+                        if (data.projects[0] != null)
+                            main_content.extend(class_arr.projects, data.projects);
+                    }
+                )
+            }
+            ,
+            getGroups: function (class_idx, proj_idx) {
+                var project = main_content.classes[class_idx].projects[proj_idx];
+                $.post(get_groups_url,
+                    {
+                        project_id: project.id,
+                    }, function (data) {
+                        console.log(data);
+                        if (data.groups[0] != null)
+                            main_content.extend(project.groups, data.groups);
+                    }
+                );
+            }
+            ,
+            getMembers: function (class_idx, proj_idx, group_idx, group_id) {
+                var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx];
+                $.post(get_members_url,
+                    {
+                        group_id: group.id
+                    }, function (data) {
+                        console.log(data);
+                        if (data.members[0] != null)
+                            main_content.extend(group.members, data.members);
+                    }
+                );
+            }
+            ,
+
+            contactMember: function (idx) {
+                if (idx < 0) {
+                    //TODO contact all members
+                } else {
+                    //TODO contact specific member
+                }
+            }
+        },
+    })
+    ;
 
