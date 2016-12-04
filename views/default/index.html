@@ -3,7 +3,6 @@
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
-    var logged_in_url = "{{=URL('api', 'logged_in', user_signature=True)}}";
     var get_classes_url = "{{=URL('api', 'get_classes', user_signature=True)}}";
     var get_projects_url = "{{=URL('api', 'get_projects', user_signature=True)}}";
     var get_groups_url = "{{=URL('api', 'get_groups', user_signature=True)}}";
@@ -21,6 +20,8 @@
     var create_group_url = "{{=URL('api', 'create_group', user_signature=True)}}";
     var join_group_url = "{{=URL('api', 'join_group', user_signature=True)}}";
     var leave_group_url = "{{=URL('api', 'leave_group', user_signature=True)}}";
+    var set_group_status_url = "{{=URL('api', 'set_group_status', user_signature=True)}}";
+    var logged_in = "{{=(True if auth.user is not None else False)}}";
 </script>
 <script>
     function signOut() {
@@ -35,12 +36,13 @@
 <div id="main_content">
     <header v-if="page=='welcome'" class="text-center">
         <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
-        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
+        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
+             style="width: 304px; height: 228px;">
         <div v-on:click="setPage('loggedin')" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     </header>
 
     <div v-if="page=='loggedin'">
-    <!-- <div v-if="logged_in"> -->
+        <!-- <div v-if="logged_in"> -->
         <!-- <a href="{{=URL('default', 'welcome')}}" onclick="signOut();">Sign out</a> -->
         <a v-on:click="setPage('welcome')" onclick="signOut();">Sign out</a>
 
@@ -118,3 +120,11 @@
 
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 <script src="{{=URL('static','js/API_calls.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        if (logged_in == 'True') {
+            main_content.getClasses();
+            main_content.setPage('loggedin');
+        }
+    });
+</script>

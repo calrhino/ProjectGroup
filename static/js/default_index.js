@@ -205,7 +205,7 @@ var main_content = new Vue({
             },
 
 
-            getClasses: function (auth_id) {
+            getClasses: function () {
                 var array = main_content.classes;
                 $.post(get_classes_url,
                     {}, function (data) {
@@ -213,8 +213,7 @@ var main_content = new Vue({
                             main_content.extend(array, data.classes);
                     }
                 );
-            }
-            ,
+            },
             getProjects: function (class_idx) {
                 var class_arr = main_content.classes[class_idx];
                 $.post(get_projects_url,
@@ -226,8 +225,7 @@ var main_content = new Vue({
                             main_content.extend(class_arr.projects, data.projects);
                     }
                 )
-            }
-            ,
+            },
             getGroups: function (class_idx, proj_idx) {
                 var project = main_content.classes[class_idx].projects[proj_idx];
                 $.post(get_groups_url,
@@ -239,9 +237,8 @@ var main_content = new Vue({
                             main_content.extend(project.groups, data.groups);
                     }
                 );
-            }
-            ,
-            getMembers: function (class_idx, proj_idx, group_idx, group_id) {
+            },
+            getMembers: function (class_idx, proj_idx, group_idx) {
                 var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx];
                 $.post(get_members_url,
                     {
@@ -252,8 +249,21 @@ var main_content = new Vue({
                             main_content.extend(group.members, data.members);
                     }
                 );
-            }
-            ,
+            },
+            setGroupStatus: function (class_idx, proj_idx, group_idx) {
+                var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx];
+                group._pending = true;
+                $.post(set_group_status_url,
+                    {
+                        group_id: group.id,
+                        new_status: group.new_status
+                    }, function (data) {
+                        console.log(data);
+                        group.status = group.new_status
+                        group._pending = false;
+                    })
+            },
+
 
             contactMember: function (idx) {
                 if (idx < 0) {
