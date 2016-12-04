@@ -11,8 +11,8 @@ import datetime
 
 db.define_table('google_auth',
                 Field('user_id', 'text'),
-                Field('user_first','text'),
-                Field('user_last', 'text'), 
+                Field('user_first', 'text'),
+                Field('user_last', 'text'),
                 Field('user_image_link', 'text'),
                 Field('user_email', 'text'),
                 Field('user_id_token', 'string')
@@ -31,11 +31,13 @@ db.define_table('classes',
 db.define_table('projects',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
-                Field('class_id', 'reference classes'))
+                Field('class_id', 'reference classes')
+                )
 
 db.define_table('groups',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
+                Field('status', 'text', default=''),
                 Field('leader_id', 'reference students'),
                 Field('project_id', 'reference projects')
                 )

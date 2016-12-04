@@ -1,8 +1,7 @@
 /**
  * Created by jarrett on 11/20/16.
  */
-var auth_id = 12345;
-function add_student() {
+function add_student(auth_id) {
     $.post(add_student_url, {
             auth_id: auth_id
         }, function (msg) {
@@ -10,7 +9,7 @@ function add_student() {
         }
     );
 }
-function create_class(name, desc) {
+function create_class(auth_id, name, desc) {
     $.post(create_class_url, {
             name: name,
             description: desc,
@@ -21,7 +20,7 @@ function create_class(name, desc) {
     );
 }
 
-function join_class(class_id) {
+function join_class(auth_id, class_id) {
     $.post(join_class_url, {
             class_id: class_id,
             auth_id: auth_id
@@ -31,7 +30,7 @@ function join_class(class_id) {
     );
 }
 
-function leave_class(class_id) {
+function leave_class(auth_id, class_id) {
     $.post(leave_class_url, {
             class_id: class_id,
             auth_id: auth_id
@@ -41,7 +40,7 @@ function leave_class(class_id) {
     );
 }
 
-function create_project(class_id, name, desc) {
+function create_project(auth_id, class_id, name, desc) {
     $.post(create_project_url, {
             class_id: class_id,
             name: name,
@@ -53,7 +52,7 @@ function create_project(class_id, name, desc) {
     );
 }
 
-function join_project(project_id) {
+function join_project(auth_id, project_id) {
     $.post(join_project_url, {
             project_id: project_id,
             auth_id: auth_id
@@ -63,7 +62,7 @@ function join_project(project_id) {
     );
 }
 
-function leave_project(project_id) {
+function leave_project(auth_id, project_id) {
     $.post(leave_project_url, {
             project_id: project_id,
             auth_id: auth_id
@@ -74,7 +73,7 @@ function leave_project(project_id) {
 }
 
 
-function create_group(project_id, name, desc) {
+function create_group(auth_id, project_id, name, desc) {
     $.post(create_group_url, {
             project_id: project_id,
             name: name,
@@ -86,7 +85,7 @@ function create_group(project_id, name, desc) {
     );
 }
 
-function join_group(group_id) {
+function join_group(auth_id, group_id) {
     $.post(join_group_url, {
             group_id: group_id,
             auth_id: auth_id
@@ -96,7 +95,7 @@ function join_group(group_id) {
     );
 }
 
-function leave_group(group_id) {
+function leave_group(auth_id, group_id) {
     $.post(leave_group_url, {
             group_id: group_id,
             auth_id: auth_id

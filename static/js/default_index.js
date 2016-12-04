@@ -149,25 +149,25 @@ var main_content = new Vue({
         //Functions to Control Visuals
         toggleClass: function (idx) {
             if (this.sel_class == idx)
-                this.sel_class = -1;
+                this.hideClass();
             else
                 this.sel_class = idx;
         },
         toggleProject: function (idx) {
             if (this.sel_project == idx)
-                this.sel_project = -1;
+                this.hideProject();
             else
                 this.sel_project = idx;
         },
         toggleGroup: function (idx) {
             if (this.sel_group == idx)
-                this.sel_group = -1;
+                this.hideGroup();
             else
                 this.sel_group = idx;
         },
         toggleMember: function (idx) {
             if (this.sel_member == idx)
-                this.sel_member = -1;
+                this.showAllMember()
             else
                 this.sel_member = idx;
         },
@@ -176,6 +176,10 @@ var main_content = new Vue({
         },
         hideClass: function () {
             this.sel_class = -1;
+            this.hideProject();
+        },
+        hideProject: function () {
+            this.sel_project = -1;
             this.hideGroup();
         },
         hideGroup: function () {
@@ -194,33 +198,59 @@ var main_content = new Vue({
             this.user_message = '';
         },
 
+
         getClasses: function (auth_id) {
             $.post(get_classes_url,
                 {
-                    auth_id: auth_id,
+                    auth_id: auth_id
                 }, function (data) {
                     console.log(data);
+                    if (data.classes[0] != null)
+                        this.classes.append(data.classes);
                 }
             );
         },
-        getGroups: function (class_id) {
+        getProjects: function (class_idx, class_id) {
+            $.post(get_projects_url,
+                {
+                    class_id: class_id
+                }, function (data) {
+                    console.log(data);
+                    this.classes[class_idx].projects.append(data.projects);
+                }
+            )
+        },
+        getGroups: function (class_idx, proj_idx, class_id) {
             $.post(get_groups_url,
                 {
                     class_id: class_id,
                 }, function (data) {
                     console.log(data);
+                    this.classes[class_idx].projects[proj_idx].groups.append(data.groups);
                 }
             );
         },
-        getStudents: function (group_id) {
-            $.post(get_students_url,
+        getMembers: function (class_idx, proj_idx, group_idx, group_id) {
+            $.post(get_members_url,
                 {
                     group_id: group_id
                 }, function (data) {
                     console.log(data);
+                    this.classes[class_idx].projects[proj_idx].groups[group_idx].members.append(data.members);
                 }
             );
         },
+
+        initView: function (auth_id) {
+            $.post(add_student_url, {
+                    auth_id: auth_id
+                }, function (msg) {
+                    console.log(msg);
+                    main_content.getClasses(auth_id);
+                }
+            );
+        },
+
         contactMember: function (idx) {
             if (idx < 0) {
                 //TODO contact all members
