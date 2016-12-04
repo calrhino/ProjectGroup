@@ -59,14 +59,13 @@ var main_content = new Vue({
         unsafeDelimiters: ['!{', '}'],
         data: {
             page: 'welcome',
-            google_auth: false,
-            auth_id: '',
             sel_class: -1,
             sel_project: -1,
             sel_group: -1,
             sel_member: -1,
             is_contact: false,
             user_message: '',
+            is_edit_status: false,
             classes: [
                 {
                     name: 'testclass_101',
@@ -147,63 +146,6 @@ var main_content = new Vue({
                 }
             },
 
-            setPage: function (page) {
-                if (this.page == page) return;
-                this.page = page;
-            },
-
-            //Functions to Control Visuals
-            toggleClass: function (idx) {
-                if (this.sel_class == idx)
-                    this.hideClass();
-                else
-                    this.sel_class = idx;
-            },
-            toggleProject: function (idx) {
-                if (this.sel_project == idx)
-                    this.hideProject();
-                else
-                    this.sel_project = idx;
-            },
-            toggleGroup: function (idx) {
-                if (this.sel_group == idx)
-                    this.hideGroup();
-                else
-                    this.sel_group = idx;
-            },
-            toggleMember: function (idx) {
-                if (this.sel_member == idx)
-                    this.showAllMember()
-                else
-                    this.sel_member = idx;
-            },
-            showContact: function () {
-                this.is_contact = true;
-            },
-            hideClass: function () {
-                this.sel_class = -1;
-                this.hideProject();
-            },
-            hideProject: function () {
-                this.sel_project = -1;
-                this.hideGroup();
-            },
-            hideGroup: function () {
-                this.sel_group = -1;
-                this.showAllMember();
-                this.hideContact();
-            },
-            showAllMember: function () {
-                this.sel_member = -1;
-            },
-            hideContact: function () {
-                this.is_contact = false;
-                this.clearMessage();
-            },
-            clearMessage: function () {
-                this.user_message = '';
-            },
-
 
             getClasses: function () {
                 var array = main_content.classes;
@@ -262,6 +204,79 @@ var main_content = new Vue({
                         group.status = group.new_status
                         group._pending = false;
                     })
+            },
+
+
+            setPage: function (page) {
+                if (this.page == page) return;
+                this.page = page;
+            },
+
+            //Functions to Control Visuals
+            toggleClass: function (class_idx) {
+                if (this.sel_class == class_idx)
+                    this.hideClass();
+                else {
+                    if (this.classes[class_idx].projects[0] == null) {
+                        this.getProjects(class_idx);
+                        this.sel_class = class_idx;
+                    }
+                }
+            },
+            toggleProject: function (proj_idx, class_idx) {
+                if (this.sel_project == proj_idx)
+                    this.hideProject();
+                else {
+                    if (this.classes[class_idx].projects[proj_idx].groups[0] == null) {
+                        this.getGroups(class_idx, proj_idx);
+                        this.sel_project = proj_idx;
+                    }
+                }
+            },
+            toggleGroup: function (group_idx, proj_idx, class_idx) {
+                if (this.sel_group == group_idx)
+                    this.hideGroup();
+                else {
+                    if (this.classes[class_idx].projects[proj_idx].groups[group_idx].members[0] == null) {
+                        this.getMembers(class_idx, proj_idx, group_idx);
+                        this.sel_group = group_idx;
+                    }
+                }
+            },
+            toggleMember: function (idx) {
+                if (this.sel_member == idx)
+                    this.showAllMember()
+                else
+                    this.sel_member = idx;
+            },
+            showContact: function () {
+                this.is_contact = true;
+            },
+            hideClass: function () {
+                this.sel_class = -1;
+                this.hideProject();
+            },
+            hideProject: function () {
+                this.sel_project = -1;
+                this.hideGroup();
+            },
+            hideGroup: function () {
+                this.sel_group = -1;
+                this.showAllMember();
+                this.hideContact();
+            },
+            showAllMember: function () {
+                this.sel_member = -1;
+            },
+            hideContact: function () {
+                this.is_contact = false;
+                this.clearMessage();
+            },
+            clearMessage: function () {
+                this.user_message = '';
+            },
+            toggleEditStatus: function () {
+                this.is_edit_status = !this.is_edit_status;
             },
 
 

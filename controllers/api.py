@@ -224,7 +224,7 @@ def set_group_status():
         raise HTTP(401)
 
     new_status = request.vars.new_status
-    db.groups[group_id].update(status=new_status)
+    db(db.groups.id == group_id).update(status=new_status)
     return response.json('update group ' + group_id + ' status success')
 
 

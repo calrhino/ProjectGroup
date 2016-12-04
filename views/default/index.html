@@ -47,14 +47,14 @@
         <a v-on:click="setPage('welcome')" onclick="signOut();">Sign out</a>
 
         <div v-for="(classe, class_idx) in classes">
-            <div class="nested_el row" v-on:click="toggleClass(class_idx)" v-if="sel_class==-1||sel_class==class_idx">
+            <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)" v-if="sel_class==-1||sel_class==class_idx">
                 <div class="nopad">class: ${classe.name}</div>
                 <hr class="nopad">
                 <div>${classe.description}</div>
 
                 <div v-if="sel_class==class_idx">
                     <div v-for="(project, project_idx) in classe.projects">
-                        <div class="nested_el" v-on:click.stop="toggleProject(project_idx)"
+                        <div class="nested_el" v-on:click.stop="toggleProject(project_idx, class_idx)"
                              v-if="sel_project==-1||sel_project==project_idx">
                             <div class="nopad">project: ${project.name}</div>
                             <hr class="nopad">
@@ -62,7 +62,7 @@
 
                             <div v-if="sel_project==project_idx">
                                 <div v-for="(group, group_idx) in project.groups">
-                                    <div class="nested_el" v-on:click.stop="toggleGroup(group_idx)"
+                                    <div class="nested_el" v-on:click.stop="toggleGroup(group_idx, project_idx, class_idx)"
                                          v-if="sel_group==-1||sel_group==group_idx">
                                         <div class="nopad">group: ${group.name}</div>
                                         <hr class="nopad">
@@ -70,16 +70,21 @@
                                         <div class="nested_el" v-if="sel_group==group_idx" v-on:click.stop>
                                             <span v-if="is_contact">To: </span>
                                             <span v-for="(member, member_idx) in group.members">
-                                    <span v-on:click="toggleMember(member_idx)"
-                                          v-if="sel_member==-1||sel_member==member_idx">
-                                        <span class="regular_el nopad">${member}</span>
-                                    </span>
-                                </span>
+                                                <span v-on:click.stop="toggleMember(member_idx)"
+                                                      v-if="sel_member==-1||sel_member==member_idx">
+                                                    <span class="regular_el nopad">${member}</span>
+                                                </span>
+                                            </span>
                                             <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">all
                                                 members
                                             </button>
                                             <button class="btn" v-if="!is_contact" v-on:click="showContact">contact
                                             </button>
+                                            <div>${group.status}
+                                                <textarea class="nested_el" v-if="is_edit_status" v-model="group.new_status"></textarea>
+                                                <button class="btn" v-on:click="toggleEditStatus">toggle edit</button>
+                                                <button class="btn" v-if="is_edit_status" v-on:click="setGroupStatus(class_idx, project_idx, group_idx)">set status</button>
+                                            </div>
                                             <div v-if="is_contact" v-on:click.stop>
                                                 <hr class="nopad">
                                                 <textarea class="nested_el" v-model="user_message"></textarea>
@@ -88,15 +93,15 @@
                                                 <button class="btn" v-on:click="hideContact">cancel</button>
                                             </div>
                                         </div>
-                                        <button class="btn" v-if="sel_group!=-1" v-on:click.stop="hideGroup">hide group
-                                        </button>
+                                        <!--button class="btn" v-if="sel_group!=-1" v-on:click.stop="hideGroup">hide group
+                                        </button-->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button class="btn" v-if="sel_class!=-1" v-on:click.stop="hideClass">hide groups</button>
+                <!--button class="btn" v-if="sel_class!=-1" v-on:click.stop="hideClass">hide groups</button-->
             </div>
         </div>
     </div>
