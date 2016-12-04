@@ -8,6 +8,11 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 
+def welcome():
+    
+    response.flash = T("Hello World")
+    return dict(message=T('Welcome to web2py!'))
+
 
 def index():
     """
@@ -38,7 +43,6 @@ def user():
     also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users
     """
     return dict(form=auth())
-
 
 @cache.action()
 def download():

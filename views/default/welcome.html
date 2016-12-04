@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+
+<div id="main_content">
+    <header v-if="page=='welcome'" class="text-center">
+        <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
+        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
+
+        <!-- <a href="{{=URL('default', 'index')}}">
+        <div class="g-signin2" 
+        	data-onsuccess="onSignIn" 
+        	data-theme="dark"
+        	data-redirecturi="http://localhost:8000/ProjectGroup/default/index"></div> -->
+
+        	<div v-on:click="http://localhost:8000/ProjectGroup/default/index" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+
+    </header>
+</div>

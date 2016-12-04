@@ -58,6 +58,8 @@ response.generic_patterns = ['*'] if request.is_local else []
 # -------------------------------------------------------------------------
 response.formstyle = myconf.get('forms.formstyle')  # or 'bootstrap3_stacked' or 'bootstrap2' or other
 response.form_label_separator = myconf.get('forms.separator') or ''
+#]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
 
 # -------------------------------------------------------------------------
 # (optional) optimize handling of static files
@@ -108,6 +110,56 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+from gluon.contrib.login_methods.oauth20_account import OAuthAccount
+from gluon.storage import Storage
+import os
+import urllib2
+try:
+    import json
+except ImportError:
+    from gluon.contrib import simplejson as json
+
+
+class GoogleAccount(OAuthAccount):
+    "OAuth 2.0 for Google"
+
+    def __init__(self):
+        with open(os.path.join(request.folder, 'private/google_auth.json'), 'rb') as f:
+            gai = Storage(json.load(f)['web'])
+            
+        OAuthAccount.__init__(self, None, gai.client_id, gai.client_secret,
+                              gai.auth_uri, gai.token_uri,
+                              scope='https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+                              approval_prompt='force', state="auth_provider=google")
+
+
+    def get_user(self):
+
+        token = self.accessToken()
+        if not token:
+            return None
+
+        uinfo_url = 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=%s' % urllib2.quote(token, safe='')
+
+        uinfo = None
+
+        try:
+            uinfo_stream = urllib2.urlopen(uinfo_url)
+        except:
+            session.token = None
+            return
+        data = uinfo_stream.read()
+        uinfo = json.loads(data)
+
+        username = uinfo['id']
+        
+        return dict(first_name = uinfo['given_name'],
+                    last_name = uinfo['family_name'],
+                    username = username,
+                    email = uinfo['email'])
+
+auth.settings.login_form = GoogleAccount()
 
 # -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example
