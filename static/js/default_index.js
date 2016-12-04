@@ -117,26 +117,6 @@ var main_content = new Vue({
                         }
                     ]
                 },
-                {
-                    name: 'testclass_007',
-                    description: 'secret_spy',
-                    groups: [
-                        {
-                            name: 'group-goldeneye',
-                            description: 'thing',
-                            members: [
-                                'bond'
-                            ]
-                        },
-                        {
-                            name: 'group-casino',
-                            description: 'boom',
-                            members: [
-                                'bond'
-                            ]
-                        }
-                    ]
-                },
             ]
         },
         methods: {
@@ -201,7 +181,8 @@ var main_content = new Vue({
                         new_status: group.new_status
                     }, function (data) {
                         console.log(data);
-                        group.status = group.new_status
+                        group.status = group.new_status;
+                        main_content.hideEditStatus();
                         group._pending = false;
                     })
             },
@@ -249,6 +230,9 @@ var main_content = new Vue({
                 else
                     this.sel_member = idx;
             },
+            toggleEditStatus: function () {
+                this.is_edit_status = !this.is_edit_status;
+            },
             showContact: function () {
                 this.is_contact = true;
             },
@@ -264,6 +248,7 @@ var main_content = new Vue({
                 this.sel_group = -1;
                 this.showAllMember();
                 this.hideContact();
+                this.hideEditStatus();
             },
             showAllMember: function () {
                 this.sel_member = -1;
@@ -272,20 +257,24 @@ var main_content = new Vue({
                 this.is_contact = false;
                 this.clearMessage();
             },
+            hideEditStatus: function () {
+                this.is_edit_status = false;
+            },
             clearMessage: function () {
                 this.user_message = '';
             },
-            toggleEditStatus: function () {
-                this.is_edit_status = !this.is_edit_status;
-            },
 
 
-            contactMember: function (idx) {
-                if (idx < 0) {
-                    //TODO contact all members
+            contactMembers: function (class_idx, project_idx, group_idx) {
+                var members = this.classes[class_idx].projects[project_idx].groups[group_idx].members;
+                if (this.sel_member < 0) {
+                    for (var i = 0, len = members.length; i < len; i++) {
+                        contact_member(members[i], this.user_message)
+                    }
                 } else {
-                    //TODO contact specific member
+                    contact_member(members[this.sel_member], this.user_message);
                 }
+                this.hideContact();
             }
         },
     })

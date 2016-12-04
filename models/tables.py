@@ -44,6 +44,12 @@ db.define_table('class_users',
                 Field('class_ref', 'reference classes')
                 )
 
+db.define_table('messages',
+                Field('sender_ref', 'reference auth_user'),
+                Field('receiver_ref', 'reference auth_user'),
+                Field('msg', 'string')
+                )
+
 db.groups.name.requires = IS_NOT_EMPTY()
 db.classes.name.requires = IS_NOT_EMPTY()
 db.projects.name.requires = IS_NOT_EMPTY()

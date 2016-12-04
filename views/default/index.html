@@ -21,6 +21,7 @@
     var join_group_url = "{{=URL('api', 'join_group', user_signature=True)}}";
     var leave_group_url = "{{=URL('api', 'leave_group', user_signature=True)}}";
     var set_group_status_url = "{{=URL('api', 'set_group_status', user_signature=True)}}";
+    var contact_user_url = "{{=URL('api', 'contact_user', user_signature=True)}}";
     var logged_in = "{{=(True if auth.user is not None else False)}}";
 </script>
 <script>
@@ -47,7 +48,8 @@
         <a v-on:click="setPage('welcome')" onclick="signOut();">Sign out</a>
 
         <div v-for="(classe, class_idx) in classes">
-            <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)" v-if="sel_class==-1||sel_class==class_idx">
+            <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)"
+                 v-if="sel_class==-1||sel_class==class_idx">
                 <div class="nopad">class: ${classe.name}</div>
                 <hr class="nopad">
                 <div>${classe.description}</div>
@@ -62,7 +64,8 @@
 
                             <div v-if="sel_project==project_idx">
                                 <div v-for="(group, group_idx) in project.groups">
-                                    <div class="nested_el" v-on:click.stop="toggleGroup(group_idx, project_idx, class_idx)"
+                                    <div class="nested_el"
+                                         v-on:click.stop="toggleGroup(group_idx, project_idx, class_idx)"
                                          v-if="sel_group==-1||sel_group==group_idx">
                                         <div class="nopad">group: ${group.name}</div>
                                         <hr class="nopad">
@@ -72,7 +75,7 @@
                                             <span v-for="(member, member_idx) in group.members">
                                                 <span v-on:click.stop="toggleMember(member_idx)"
                                                       v-if="sel_member==-1||sel_member==member_idx">
-                                                    <span class="regular_el nopad">${member}</span>
+                                                    <span :class="{user_el:member.is_user}" class="regular_el nopad">${member.name}</span>
                                                 </span>
                                             </span>
                                             <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">all
@@ -80,17 +83,23 @@
                                             </button>
                                             <button class="btn" v-if="!is_contact" v-on:click="showContact">contact
                                             </button>
-                                            <div>${group.status}
-                                                <textarea class="nested_el" v-if="is_edit_status" v-model="group.new_status"></textarea>
-                                                <button class="btn" v-on:click="toggleEditStatus">toggle edit</button>
-                                                <button class="btn" v-if="is_edit_status" v-on:click="setGroupStatus(class_idx, project_idx, group_idx)">set status</button>
+                                            <div class="nested_el" v-on:click.stop="toggleEditStatus">status:
+                                                ${group.status}
+                                                <textarea class="nested_el" v-on:click.stop v-if="is_edit_status"
+                                                          v-model="group.new_status"></textarea>
+                                                <button class="btn" v-if="is_edit_status"
+                                                        v-on:click.stop="setGroupStatus(class_idx, project_idx, group_idx)">
+                                                    set status
+                                                </button>
                                             </div>
-                                            <div v-if="is_contact" v-on:click.stop>
+                                            <div v-if="is_contact">
                                                 <hr class="nopad">
                                                 <textarea class="nested_el" v-model="user_message"></textarea>
-                                                <button class="btn" v-on:click="contactMember(sel_member)">submit
+                                                <button class="btn"
+                                                        v-on:click.stop="contactMembers(class_idx, project_idx, group_idx)">
+                                                    submit
                                                 </button>
-                                                <button class="btn" v-on:click="hideContact">cancel</button>
+                                                <button class="btn" v-on:click.stop="hideContact">cancel</button>
                                             </div>
                                         </div>
                                         <!--button class="btn" v-if="sel_group!=-1" v-on:click.stop="hideGroup">hide group

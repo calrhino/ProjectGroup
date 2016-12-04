@@ -89,3 +89,12 @@ function leave_group(group_id) {
 }
 
 
+function contact_member(member, msg) {
+    $.post(contact_user_url,
+        {
+            id: member.id,
+            msg: msg
+        }, function (msg) {
+            console.log(msg);
+        });
+}

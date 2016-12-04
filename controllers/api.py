@@ -228,6 +228,15 @@ def set_group_status():
     return response.json('update group ' + group_id + ' status success')
 
 
+# messages API calls ----------------------------
+@auth.requires_login()
+def contact_user():
+    """contacts the requested user"""
+    sender = auth.user
+    receiver = db.auth_user[request.vars.id]
+    db.messages.insert(sender_ref=sender, receiver_ref=receiver, msg=request.vars.msg)
+    return response.json('send message to ' + receiver.first_name + ' success')
+
 # other methods  -------------------------------- -------------------------------------------------
 # check if the vars exist
 def assert_vars(*vars):
@@ -268,10 +277,11 @@ def response_group(g):
 
 
 def response_member(s):
-    if auth.user.id == s:
-        return s.first_name + ' ' + s.last_name + '*'
-    return s.first_name + ' ' + s.last_name
-
+    return dict(
+        id=s.id,
+        name=s.first_name + ' ' + s.last_name,
+        is_user=True if auth.user.id == s else False,
+    )
 
 def pr(msg):
     print(msg)
