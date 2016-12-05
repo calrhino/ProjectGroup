@@ -6,20 +6,29 @@ def get_all_classes():
     # This is really ... not so good use of resources :(
     classes = db(db.classes).select()
     exclude = db(db.class_users.user_ref == auth.user).select()
-    for i, e in enumerate(exclude):
-        classes = classes.exclude(lambda row: row.id == e)
+
+    # exclude code does not work quite right, so have hacky fix instead
+    #for i, e in enumerate(exclude):
+    #    classes = classes.exclude(lambda row: row.id == e.id)
+
     response_classes = []
+    pr (classes)
 
     # get class from each relation (classes of student)
-    for i, c in enumerate(classes):
-        response_classes.append(response_class(c))
+    for c in classes:
+        bool = True
+        for e in exclude:
+            if (e.class_ref == c.id):
+                bool = False
+        if bool:
+            response_classes.append(response_class(c))
     return response.json(dict(classes=response_classes))
 
 
 @auth.requires_login()
 def get_messages():
     """get the messages associated with a user"""
-    messages = db(db.messages.receiver_ref == auth.user).select()
+    messages = db(db.messages.receiver_ref == auth.user).select(orderby=~db.messages.id)
     response_messages = []
 
     for i, m in enumerate(messages):

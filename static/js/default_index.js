@@ -2,6 +2,12 @@
  * Created by jarrett on 11/12/16.
  */
 
+function extend (a, b) {
+    for (var i = 0; i < b.length; i++) {
+        a.push(b[i]);
+    }
+}
+
 var user_profile = new Vue({
     el: "#user_profile",
     delimiters: ['${', '}'],
@@ -89,11 +95,6 @@ var main_content = new Vue({
 
         },
         methods: {
-            extend: function (a, b) {
-                for (var i = 0; i < b.length; i++) {
-                    a.push(b[i]);
-                }
-            },
 
 
             getClasses: function () {
@@ -101,7 +102,7 @@ var main_content = new Vue({
                     {}, function (data) {
                         console.log(data)
                         main_content.classes = [];
-                        main_content.extend(main_content.classes, data.classes);
+                        extend(main_content.classes, data.classes);
                     }
                 );
             },
@@ -113,7 +114,7 @@ var main_content = new Vue({
                     }, function (data) {
                         console.log(data);
                         if (data.projects[0] != null)
-                            main_content.extend(class_arr.projects, data.projects);
+                            extend(class_arr.projects, data.projects);
                     }
                 )
             },
@@ -125,7 +126,7 @@ var main_content = new Vue({
                     }, function (data) {
                         console.log(data);
                         if (data.groups[0] != null)
-                            main_content.extend(project.groups, data.groups);
+                            extend(project.groups, data.groups);
                     }
                 );
             },
@@ -137,7 +138,7 @@ var main_content = new Vue({
                     }, function (data) {
                         console.log(data);
                         if (data.members[0] != null)
-                            main_content.extend(group.members, data.members);
+                            extend(group.members, data.members);
                     }
                 );
             },
@@ -158,14 +159,16 @@ var main_content = new Vue({
             getAllClasses: function () {
                 $.post(get_all_classes_url,
                     {}, function (data) {
-                        main_content.allclasses = data.classes;
+                        main_content.allclasses = [];
+                        extend(main_content.allclasses, data.classes);
                     }
                 );
             },
             getMessages: function () {
                 $.post(get_messages_url,
                     {}, function (data) {
-                        main_content.messages = data.messages;
+                        main_content.messages = [];
+                        extend(main_content.messages, data.messages);
                     }
                 );
             },
