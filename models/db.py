@@ -108,6 +108,7 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 # -------------------------------------------------------------------------
 # disables changing password since it auth is by Google
 auth.settings.actions_disabled.append('change_password')
+auth.settings.actions_disabled.append('request_reset_password')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
