@@ -7,7 +7,6 @@
 
 response.logo = A(B('Project ', SPAN(4), ' Groups'), XML('&trade;&nbsp;'),
                   _class="navbar-brand", _href="http://localhost:8000/ProjectGroup/default/index")
-                # <!-- http://theprojectgroup.pythonanywhere.com/init/default/user/welcome -->
 
 response.title = request.application.replace('_', ' ').title()
 response.subtitle = ''
