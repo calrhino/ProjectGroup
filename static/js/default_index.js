@@ -283,19 +283,7 @@ var main_content = new Vue({
                 this.create.new_group.edit = false;
             },
 
-
-            contactMembers: function (class_idx, project_idx, group_idx) {
-                this.hideContact();
-                var members = this.classes[class_idx].projects[project_idx].groups[group_idx].members;
-                if (this.sel_member < 0) {
-                    for (var i = 0, len = members.length; i < len; i++) {
-                        this.contact_member(members[i], this.user_message)
-                    }
-                } else {
-                    this.contact_member(members[this.sel_member], this.user_message);
-                }
-            },
-            contactMember: function (member, msg) {
+            contact_member: function (member, msg) {
                 $.post(contact_user_url,
                     {
                         id: member.id,
@@ -305,6 +293,19 @@ var main_content = new Vue({
                     }
                 );
             },
+            contactMembers: function (class_idx, project_idx, group_idx) {
+                var message = this.user_message;
+                this.hideContact();
+                var members = this.classes[class_idx].projects[project_idx].groups[group_idx].members;
+                if (this.sel_member < 0) {
+                    for (var i = 0, len = members.length; i < len; i++) {
+                        this.contact_member(members[i], message)
+                    }
+                } else {
+                    this.contact_member(members[this.sel_member], message);
+                }
+            },
+
 
             join_class: function (class_idx) {
                 $.post(join_class_url, {
