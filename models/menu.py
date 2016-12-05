@@ -49,47 +49,9 @@ def _():
     # useful links to internal and external resources
     # ------------------------------------------------------------------------------------------------------------------
     response.menu += [
-        # email to contact us 
+        # email to contact us for any problems
         (T('Help'), False, '#', [
             (T('Contact Us'), False,'mailto:cohau@ucsc.edu;jawchan@ucsc.edu'),
-        ]),
-        (T('Documentation'), False, '#', [
-            (T('Online book'), False, 'http://www.web2py.com/book'),
-            LI(_class="divider"),
-            (T('Preface'), False,
-             'http://www.web2py.com/book/default/chapter/00'),
-            (T('Introduction'), False,
-             'http://www.web2py.com/book/default/chapter/01'),
-            (T('Python'), False,
-             'http://www.web2py.com/book/default/chapter/02'),
-            (T('Overview'), False,
-             'http://www.web2py.com/book/default/chapter/03'),
-            (T('The Core'), False,
-             'http://www.web2py.com/book/default/chapter/04'),
-            (T('The Views'), False,
-             'http://www.web2py.com/book/default/chapter/05'),
-            (T('Database'), False,
-             'http://www.web2py.com/book/default/chapter/06'),
-            (T('Forms and Validators'), False,
-             'http://www.web2py.com/book/default/chapter/07'),
-            (T('Email and SMS'), False,
-             'http://www.web2py.com/book/default/chapter/08'),
-            (T('Access Control'), False,
-             'http://www.web2py.com/book/default/chapter/09'),
-            (T('Services'), False,
-             'http://www.web2py.com/book/default/chapter/10'),
-            (T('Ajax Recipes'), False,
-             'http://www.web2py.com/book/default/chapter/11'),
-            (T('Components and Plugins'), False,
-             'http://www.web2py.com/book/default/chapter/12'),
-            (T('Deployment Recipes'), False,
-             'http://www.web2py.com/book/default/chapter/13'),
-            (T('Other Recipes'), False,
-             'http://www.web2py.com/book/default/chapter/14'),
-            (T('Helping web2py'), False,
-             'http://www.web2py.com/book/default/chapter/15'),
-            (T("Buy web2py's book"), False,
-             'http://stores.lulu.com/web2py'),
         ]),
     ]
 
