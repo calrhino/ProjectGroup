@@ -51,7 +51,7 @@ def _():
     response.menu += [
         # (T('My Sites'), False, URL('admin', 'default', 'site')),
         (T('Help'), False, '#', [
-            (T('Contact Us'), False, URL('admin', 'default', 'design/%s' % app)),
+            (T('Contact Us'), False,'mailto:cohau@ucsc.edu'),
             LI(_class="divider"),
         ]),
         (T('Documentation'), False, '#', [
