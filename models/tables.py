@@ -30,14 +30,14 @@ db.define_table('groups',
                 )
 
 db.define_table('group_students',
-                Field('student_ref', 'reference auth_user', ondelete="NO ACTION"),
-                Field('group_ref', 'reference groups', ondelete="NO ACTION")
+                Field('student_ref', 'reference auth_user'),
+                Field('group_ref', 'reference groups')
                 , ondelete="NO ACTION"
                 )
 
 db.define_table('class_users',
-                Field('user_ref', 'reference auth_user', ondelete="NO ACTION"),
-                Field('class_ref', 'reference classes', ondelete="NO ACTION")
+                Field('user_ref', 'reference auth_user'),
+                Field('class_ref', 'reference classes')
                 , ondelete="NO ACTION"
                 )
 
