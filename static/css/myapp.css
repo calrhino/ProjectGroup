@@ -7,9 +7,14 @@
     transform: translateY(-5px);
 }
 
-.fade-enter-active, .fade-leave-active{
+.fade-enter-active{
     transition: all 0.2s;
     transition-delay: 0.2s;
+}
+
+.fade-leave{
+    transition: 0s;
+    opacity:0
 }
 
 .fade-enter{
