@@ -47,7 +47,7 @@ var main_content = new Vue({
             getClasses: function () {
                 $.post(get_classes_url,
                     {}, function (data) {
-                        console.log(data)
+                        //console.log(data)
                         main_content.classes = [];
                         extend(main_content.classes, data.classes);
                     }
@@ -59,7 +59,7 @@ var main_content = new Vue({
                     {
                         class_id: class_arr.id
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.projects[0] != null)
                             extend(class_arr.projects, data.projects);
                     }
@@ -71,7 +71,7 @@ var main_content = new Vue({
                     {
                         project_id: project.id,
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.groups[0] != null)
                             extend(project.groups, data.groups);
                     }
@@ -83,7 +83,7 @@ var main_content = new Vue({
                     {
                         group_id: group.id
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.members[0] != null)
                             extend(group.members, data.members);
                     }
@@ -97,7 +97,7 @@ var main_content = new Vue({
                         group_id: group.id,
                         new_status: group.new_status
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         group.status = group.new_status;
                         main_content.hideEditStatus();
                         group._pending = false;
@@ -126,7 +126,7 @@ var main_content = new Vue({
                         name: obj.name,
                         description: obj.description,
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         main_content.classes.push(data)
                     }
                 );
@@ -141,7 +141,7 @@ var main_content = new Vue({
                         name: obj.name,
                         description: obj.description,
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         main_content.classes[class_idx].projects.push(data);
                     }
                 );
@@ -156,7 +156,7 @@ var main_content = new Vue({
                         name: obj.name,
                         description: obj.description,
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         main_content.classes[class_idx].projects[proj_idx].groups.push(data);
                     }
                 );
@@ -209,8 +209,9 @@ var main_content = new Vue({
                 }
             },
             toggleGroup: function (group_idx, proj_idx, class_idx) {
-                if (this.sel_group == group_idx)
+                if (this.sel_group == group_idx) {
                     this.hideGroup();
+                }
                 else {
                     if (this.classes[class_idx].projects[proj_idx].groups[group_idx].members[0] == null) {
                         this.getMembers(class_idx, proj_idx, group_idx);
@@ -300,7 +301,7 @@ var main_content = new Vue({
                         id: member.id,
                         msg: msg
                     }, function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                     }
                 );
             },
@@ -309,7 +310,7 @@ var main_content = new Vue({
                 $.post(join_class_url, {
                         class_id: this.allclasses[class_idx].id,
                     }, function (data) {
-                        console.log(data);
+                        //console.log(data);
                         main_content.classes.unshift(data);
                     }
                 );
@@ -320,7 +321,7 @@ var main_content = new Vue({
                 $.post(leave_class_url, {
                         class_id: this.classes[class_idx].id,
                     }, function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                     }
                 );
                 main_content.classes.splice(class_idx, 1);
@@ -330,7 +331,7 @@ var main_content = new Vue({
                 $.post(delete_class_url, {
                         class_id: this.classes[class_idx].id,
                     }, function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                     }
                 );
                 main_content.classes.splice(class_idx, 1);
@@ -340,7 +341,7 @@ var main_content = new Vue({
                 $.post(delete_project_url, {
                     project_id: this.classes[class_idx].projects[proj_idx].id,
                 }, function (msg) {
-                    console.log(msg)
+                    //console.log(msg)
                 });
             },
             join_group: function (group_idx, proj_idx, class_idx) {
@@ -349,7 +350,7 @@ var main_content = new Vue({
                         group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
                     }, function (data) {
                         data.is_user = true;
-                        console.log(data);
+                        //console.log(data);
                         var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx]
                         group.members.push(data);
                     }
@@ -360,7 +361,7 @@ var main_content = new Vue({
                 $.post(leave_group_url, {
                         group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
                     }, function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                         var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx];
                         for (var i = 0, len = group.members.length; i < len; i++)
                             if (group.members[i].is_user == true)
@@ -373,7 +374,7 @@ var main_content = new Vue({
                 $.post(delete_group_url, {
                         group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
                     }, function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                     }
                 );
                 main_content.classes[class_idx].projects[proj_idx].groups.splice(group_idx, 1);
