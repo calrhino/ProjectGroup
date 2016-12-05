@@ -1,3 +1,21 @@
+.slide-fade-enter-active, .slide-fade-leave-active {
+    transition: all 0.2s;
+}
+
+.slide-fade-enter, .slide-fade-leave-active {
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+.fade-enter-active, .fade-leave-active{
+    transition: all 0.2s;
+    transition-delay: 0.2s;
+}
+
+.fade-enter{
+    opacity: 0;
+}
+
 .nested_el, .regular_el, .user_el {
     border: 1px solid gray;
     border-radius: 5px;
@@ -21,21 +39,21 @@
 }
 
 .g-signin2 {
-	margin: 0 auto;
-	width: 100px;
+    margin: 0 auto;
+    width: 100px;
 }
 
-.header{
+.header {
     background-image: url("https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg");
 }
 
 .body {
-	background-color: black;
+    background-color: black;
 }
 
 /*The looks of the Login and Sign up Button*/
 .button {
-	background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; /* Green */
     border: 2px;
     border-radius: 25px;
     color: white;
