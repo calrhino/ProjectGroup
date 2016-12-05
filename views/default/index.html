@@ -1,41 +1,56 @@
+<script>
+    if ("{{=('welcome' if auth.user is not None else None)}}" == 'welcome') {
+        window.location.replace("{{=URL('default', 'welcome')}}");
+    }
+</script>
 {{extend 'layout.html'}}
-
-<script src="{{=URL('static', 'js/vue.js')}}"></script>
-
 <div id="main_content">
     <body>
-        <header class="text-center">
+    <header class="text-center">
         <!-- <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
         <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
-
         	<div v-on:click="http://localhost:8000/ProjectGroup/default/index" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
-
-            <div class="jumbotron"><h1 style="color: black;">Project Groups</h1></div>
-            <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
-            <div style="text-align: center;">
-                <a href="{{=URL('default','welcome')}}">
-                    <button class="button" onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';" id="loginButton"> Login with your Google Account </button> 
-                </a>
+        
+        <div class="jumbotron"><h1 style="color: black;">Project Groups</h1></div>
+        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
+             style="width: 304px; height: 228px;">
+        <div style="text-align: center;">
+            <a href="{{=URL('default','welcome')}}">
+                <button class="button"
+                        onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
+                        id="loginButton"> Login with your Google Account
+                </button>
+            </a>
             <!-- http://theprojectgroup.pythonanywhere.com/init/default/user/logins -->
 
-                <a href="{{=URL('default','welcome')}}">
-                    <button class="button" onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';" id="loginButton"> Sign Up </button>
-                </a>
+            <a href="{{=URL('default','welcome')}}">
+                <button class="button"
+                        onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
+                        id="loginButton"> Sign Up
+                </button>
+            </a>
 
-            </div>
+        </div>
 
-       <!--  <a href="{{=URL('default', 'welcome')}}">
+        <!--  <a href="{{=URL('default', 'welcome')}}">
             <button v-on:click="http://localhost:8000/ProjectGroup/default/welcome"> Go next </button>
         </a> -->
-        </header>
+    </header>
     </body>
     <body>
-        <div class="text-center">
-            <h2 style="color:blue;">
-                How to use Project Groups?
-            </h2>
-        </div>
-        <h4> First, Create/Login your Google Account</h4>
+    <div class="text-center">
+        <h2 style="color:blue;">
+            How to use Project Groups?
+        </h2>
+    </div>
+    <h4> First, Create/Login your Google Account</h4>
     </body>
-
 </div>
+<script>
+
+    $(document).ready(function () {
+        if ("{{=('welcome' if auth.user is not None else None)}}" == 'welcome') {
+            window.location.replace("{{=URL('default', 'welcome')}}");
+        }
+    });
+</script>
