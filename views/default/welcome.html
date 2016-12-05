@@ -1,6 +1,9 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+
+<!-- This is the core page using vue.js to create a class, a group/project, and  messages -->
+
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var get_all_classes_url = "{{=URL('api', 'get_all_classes', user_signature=True)}}";
