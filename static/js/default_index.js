@@ -44,8 +44,6 @@ var main_content = new Vue({
 
         },
         methods: {
-
-
             getClasses: function () {
                 $.post(get_classes_url,
                     {}, function (data) {
@@ -122,6 +120,7 @@ var main_content = new Vue({
                 );
             },
             createClass: function () {
+                this.create.new_class.edit = false;
                 var obj = this.create.new_class;
                 $.post(create_class_url, {
                         name: obj.name,
@@ -134,6 +133,7 @@ var main_content = new Vue({
                 this.hideCreateClass();
             },
             createProject: function (class_idx) {
+                this.create.new_project.edit = false;
                 var obj = this.create.new_project;
                 var id = this.classes[class_idx].id;
                 $.post(create_project_url, {
@@ -148,6 +148,7 @@ var main_content = new Vue({
                 this.hideCreateProject();
             },
             createGroup: function (class_idx, proj_idx) {
+                this.create.new_group.edit = false;
                 var obj = this.create.new_group;
                 var id = this.classes[class_idx].projects[proj_idx].id;
                 $.post(create_group_url, {
@@ -283,6 +284,7 @@ var main_content = new Vue({
 
 
             contactMembers: function (class_idx, project_idx, group_idx) {
+                this.hideContact();
                 var members = this.classes[class_idx].projects[project_idx].groups[group_idx].members;
                 if (this.sel_member < 0) {
                     for (var i = 0, len = members.length; i < len; i++) {
@@ -291,9 +293,7 @@ var main_content = new Vue({
                 } else {
                     this.contact_member(members[this.sel_member], this.user_message);
                 }
-                this.hideContact();
             },
-
             contactMember: function (member, msg) {
                 $.post(contact_user_url,
                     {
@@ -310,39 +310,41 @@ var main_content = new Vue({
                         class_id: this.allclasses[class_idx].id,
                     }, function (data) {
                         console.log(data);
-                        main_content.allclasses.splice(class_idx, 1);
                         main_content.classes.unshift(data);
                     }
                 );
+                main_content.allclasses.splice(class_idx, 1);
             },
             leave_class: function (class_idx) {
+                main_content.hideClass();
                 $.post(leave_class_url, {
                         class_id: this.classes[class_idx].id,
                     }, function (msg) {
                         console.log(msg);
-                        main_content.classes.splice(class_idx, 1);
                     }
                 );
-                main_content.hideClass();
+                main_content.classes.splice(class_idx, 1);
             },
             delete_class: function (class_idx) {
+                main_content.hideClass();
                 $.post(delete_class_url, {
                         class_id: this.classes[class_idx].id,
                     }, function (msg) {
                         console.log(msg);
-                        main_content.classes.splice(class_idx, 1);
                     }
                 );
+                main_content.classes.splice(class_idx, 1);
             },
             delete_project: function (class_idx, proj_idx) {
+                main_content.classes[class_idx].projects.splice(proj_idx, 1);
                 $.post(delete_project_url, {
                     project_id: this.classes[class_idx].projects[proj_idx].id,
                 }, function (msg) {
                     console.log(msg)
-                    main_content.classes[class_idx].projects.splice(proj_idx, 1);
                 });
             },
             join_group: function (group_idx, proj_idx, class_idx) {
+                main_content.classes[class_idx].projects[proj_idx].groups[group_idx].is_group = true;
                 $.post(join_group_url, {
                         group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
                     }, function (data) {
@@ -350,11 +352,11 @@ var main_content = new Vue({
                         console.log(data);
                         var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx]
                         group.members.push(data);
-                        group.is_group = true;
                     }
                 );
             },
             leave_group: function (group_idx, proj_idx, class_idx) {
+                main_content.classes[class_idx].projects[proj_idx].groups[group_idx].is_group = false;
                 $.post(leave_group_url, {
                         group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
                     }, function (msg) {
@@ -363,18 +365,18 @@ var main_content = new Vue({
                         for (var i = 0, len = group.members.length; i < len; i++)
                             if (group.members[i].is_user == true)
                                 group.members.splice(i, 1);
-                        group.is_group = false;
                     }
                 );
             },
             delete_group: function (group_idx, proj_idx, class_idx) {
+                this.hideGroup();
                 $.post(delete_group_url, {
                         group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
                     }, function (msg) {
                         console.log(msg);
-                        main_content.classes[class_idx].projects[proj_idx].groups.splice(group_idx, 1);
                     }
                 );
+                main_content.classes[class_idx].projects[proj_idx].groups.splice(group_idx, 1);
             },
         },
     })

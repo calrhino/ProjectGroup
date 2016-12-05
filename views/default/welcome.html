@@ -129,14 +129,16 @@
                                                     v-on:click.stop="join_group(group_idx, project_idx, class_idx)">join
                                                 group
                                             </button>
+                                            <span v-else>
                                             <button v-if="group.is_leader" class="btn"
                                                     v-on:click.stop="delete_group(group_idx, project_idx, class_idx)">
                                                 delete group
                                             </button>
-                                            <button v-else class="btn"
+                                            <button v-if="!group.is_leader" class="btn"
                                                     v-on:click.stop="leave_group(group_idx, project_idx, class_idx)">
                                                 leave group
                                             </button>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
