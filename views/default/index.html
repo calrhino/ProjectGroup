@@ -1,6 +1,5 @@
 {{extend 'layout.html'}}
 
-{{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var get_all_classes_url = "{{=URL('api', 'get_all_classes', user_signature=True)}}";
@@ -209,17 +208,60 @@
     <button class="btn" v-on:click="toggleAdd" v-if="is_add">cancel</button>
     <input type="text" v-if="is_add" v-model="trait_field">
 
-    <div class="nested_el">[insert profile pic]</div>
-    <span class="regular_el" v-for="(trait, index) in traits">${trait}</span>
-</div>
-{{end}}
+    <div id="main_content">
+        <body>
+        <header class="text-center">
+            <!-- <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
+            <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
 
-<script src="{{=URL('static','js/API_calls.js')}}"></script>
-<script src="{{=URL('static','js/default_index.js')}}"></script>
-<script>
-    $(document).ready(function () {
-        if (logged_in == 'True') {
-            main_content.setPage('loggedin');
-        }
-    });
-</script>
+
+
+                <div v-on:click="http://localhost:8000/ProjectGroup/default/index" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+
+            <div class="jumbotron"><h1 style="color: black;">Project Groups</h1></div>
+            <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
+                 style="width: 304px; height: 228px;">
+            <div style="text-align: center;">
+                <a href="{{=URL('default','welcome')}}">
+                    <button class="button"
+                            onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';"
+                            id="loginButton"> Login with your Google Account
+                    </button>
+                </a>
+                <!-- http://theprojectgroup.pythonanywhere.com/init/default/user/logins -->
+
+                <a href="{{=URL('default','welcome')}}">
+                    <button class="button"
+                            onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';"
+                            id="loginButton"> Sign Up
+                    </button>
+                </a>
+
+            </div>
+
+            <!--  <a href="{{=URL('default', 'welcome')}}">
+            <button v-on:click="http://localhost:8000/ProjectGroup/default/welcome"> Go next </button>
+        </a> -->
+        </header>
+        </body>
+        <body>
+        <div class="text-center">
+            <h2 style="color:blue;">
+                How to use Project Groups?
+            </h2>
+        </div>
+        <h4> First, Create/Login your Google Account</h4>
+        </body>
+
+        <script src="{{=URL('static','js/API_calls.js')}}"></script>
+        <script src="{{=URL('static','js/default_index.js')}}"></script>
+        <script>
+            $(document).ready(function () {
+                if (logged_in == 'True') {
+                    main_content.setPage('loggedin');
+                }
+            });
+        </script>
+        =======
+    </div>
+    >>>>>>> master
