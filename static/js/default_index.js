@@ -8,57 +8,6 @@ function extend (a, b) {
     }
 }
 
-var user_profile = new Vue({
-    el: "#user_profile",
-    delimiters: ['${', '}'],
-    unsafeDelimiters: ['!{', '}'],
-    data: {
-        is_show: false,
-        is_delete: false,
-        is_add: false,
-        traits: [],
-        imglink: '',
-        suggested: [],
-        trait_field: '',
-    },
-    methods: {
-        toggleViewing: function () {
-            this.is_show = !this.is_show;
-        },
-        toggleDelete: function () {
-            this.is_delete = !this.is_delete;
-        },
-        toggleAdd: function () {
-            this.is_add = !this.is_add;
-            this.trait_field = '';
-        },
-        addTrait: function (trait) {
-            //TODO communicate submit with database
-            $.post(add_trait_url, {
-                trait: trait
-            }, function (data) {
-                this.traits.unshift(data.trait);
-            })
-        },
-        delTrait: function (idx) {
-            var trait = this.traits[idx];
-            //TODO communicate delete with database
-            $.post(del_trait_url, {
-                id: trait.id
-            }, function (data) {
-                this.traits.splice(idx, 1);
-            });
-        },
-        getTraits: function (idx) {
-            $getJSON(get_traits_url, function (data) {
-                this.traits = data.traits;
-                this.imglink = data.imglink;
-                this.suggested = data.suggested;
-            });
-        }
-    }
-});
-
 var main_content = new Vue({
         el: "#main_content",
         delimiters: ['${', '}'],

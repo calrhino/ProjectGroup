@@ -1,3 +1,8 @@
+<script>
+    if ("{{=('welcome' if auth.user is not None else None)}}" == 'welcome') {
+        window.location.replace("{{=URL('default', 'welcome')}}");
+    }
+</script>
 {{extend 'layout.html'}}
 <div id="main_content">
     <body>
@@ -45,8 +50,9 @@
     </body>
 </div>
 <script>
-    $(document).ready(function(){
-        if ("{{=('welcome' if auth.user is not None else None)}}"=='welcome'){
+
+    $(document).ready(function () {
+        if ("{{=('welcome' if auth.user is not None else None)}}" == 'welcome') {
             window.location.replace("{{=URL('default', 'welcome')}}");
         }
     });
