@@ -145,17 +145,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button v-if="classe.is_instructor" class="btn"
+                                <button style="margin-top: 1.5em" v-if="classe.is_instructor" class="btn"
                                         v-on:click.stop="delete_project(class_idx, project_idx)">delete
                                     project
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <button v-if="classe.is_instructor" class="btn" v-on:click.stop="delete_class(class_idx)">delete
-                        class
+                    <button style="margin-top: 1.5em" v-if="classe.is_instructor" class="btn" v-on:click.stop="delete_class(class_idx)">delete class
                     </button>
-                    <button v-else class="btn" v-on:click.stop="leave_class(class_idx)">leave class</button>
+                    <button style="margin-top: 1.5em" v-else class="btn" v-on:click.stop="leave_class(class_idx)">leave class</button>
                 </div>
                 <!--button class="btn" v-if="sel_class!=-1" v-on:click.stop="hideClass">hide groups</button-->
             </div>
