@@ -12,7 +12,7 @@ if request.global_settings.web2py_version < "2.14.1":
 # if SSL/HTTPS is properly configured and you want all HTTP requests to
 # be redirected to HTTPS, uncomment the line below:
 # -------------------------------------------------------------------------
-# request.requires_https()
+#request.requires_https()
 
 # -------------------------------------------------------------------------
 # app configuration made easy. Look inside private/appconfig.ini
@@ -84,6 +84,7 @@ from gluon.tools import Auth, Service, PluginManager
 
 # host names must be a list of allowed host names (glob syntax allowed)
 auth = Auth(db, host_names=myconf.get('host.names'))
+auth.settings.extra_fields['auth_user']= [ Field('img_link', 'string')]
 service = Service()
 plugins = PluginManager()
 
@@ -160,7 +161,8 @@ class GoogleAccount(OAuthAccount):
         return dict(first_name = uinfo['given_name'],
                     last_name = uinfo['family_name'],
                     username = username,
-                    email = uinfo['email'])
+                    email = uinfo['email'],
+                    img_link = uinfo['picture'])
 
 # auth.settings.login_next = URL('loggedin')
 auth.settings.login_form = GoogleAccount()

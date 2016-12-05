@@ -96,8 +96,15 @@
 
                                             <span v-for="(member, member_idx) in group.members">
                                                 <span v-on:click.stop="toggleMember(member_idx)"
+                                                      v-on:mouseover="showUserImage(member_idx)"
                                                       v-if="sel_member==-1||sel_member==member_idx">
-                                                    <span :class="{user_el:member.is_user}" class="regular_el nopad">${member.name}</span>
+                                                    <img v-if="sel_user_img==member_idx"
+                                                         :src="member.img_link" :alt="member.name"
+                                                         style="width:40px;height:40px;">
+                                                    <span :class="{user_el:member.is_user}"
+                                                          class="regular_el nopad"
+                                                          v-on:mouseleave="hideUserImage">
+                                                        ${member.name}</span>
                                                 </span>
                                             </span>
                                             <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">all

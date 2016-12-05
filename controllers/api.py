@@ -303,6 +303,7 @@ def response_member(s):
         id=s.id,
         name=s.first_name + ' ' + s.last_name,
         is_user=True if auth.user.id == s else False,
+        img_link=auth.user.img_link
     )
 
 
