@@ -126,7 +126,7 @@
     <div v-if="page=='loggedin'">
         <!-- <div v-if="logged_in"> -->
         <!-- <a href="{{=URL('default', 'welcome')}}" onclick="signOut();">Sign out</a> -->
-        <a v-on:click="setPage('welcome')" onclick="signOut();">Sign out</a>
+        <!-- <a v-on:click="setPage('welcome')" onclick="signOut();">Sign out</a> -->
 
         <div v-for="(classe, class_idx) in classes">
             <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)"
