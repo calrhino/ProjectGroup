@@ -31,8 +31,11 @@
 
     <!-- <div v-if="logged_in"> -->
         <!-- <a href="{{=URL('default', 'welcome')}}" onclick="signOut();">Sign out</a> -->
-        <button on:click="http://localhost:8000/ProjectGroup/default/index" onclick="signOut();">Sign out</button>
-
+        <!-- <button on:click="http://localhost:8000/ProjectGroup/default/index" onclick="signOut();">Sign out</button> -->
+        <h2> The Groups </h2>
+        <h2> 
+            <button>Create the Class </button>
+        </h2>
         <div v-for="(classe, class_idx) in classes">
             <div class="nested_el row" v-on:click="toggleClass(class_idx)" v-if="sel_class==-1||sel_class==class_idx">
                 <div class="nopad">Class</div>
