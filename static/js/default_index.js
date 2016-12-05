@@ -174,14 +174,16 @@ var main_content = new Vue({
                 create_class(obj.name, obj.description);
                 this.hideCreateClass();
             },
-            createProject: function () {
+            createProject: function (class_idx) {
                 var obj = this.create.new_project;
-                create_class(obj.name, obj.description);
+                var id = this.classes[class_idx].id;
+                create_project(id, obj.name, obj.description);
                 this.hideCreateProject();
             },
-            createGroup: function () {
+            createGroup: function (class_idx, proj_idx) {
                 var obj = this.create.new_group;
-                create_class(obj.name, obj.description);
+                var id = this.classes[class_idx].projects[proj_idx].id;
+                create_group(id, obj.name, obj.description);
                 this.hideCreateGroup();
             },
 
@@ -331,6 +333,9 @@ var main_content = new Vue({
             },
             leave_group: function (group_idx, proj_idx, class_idx) {
                 leave_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
+            },
+            delete_group: function (group_idx, proj_idx, class_idx) {
+                delete_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
             },
         },
     })

@@ -159,7 +159,7 @@ def create_project():
     description = request.vars.description
 
     project_ref = db.projects.insert(name=name, description=description, class_ref=db.classes[class_id])
-    return response.json('create project ' + project_ref.id + ' success')
+    return response.json('create project success')
 
 
 @auth.requires_login()
@@ -184,7 +184,7 @@ def create_group():
     group_ref = db.groups.insert(name=name, description=description, leader_ref=leader,
                                  project_ref=db.projects[project_id])
     db.group_students.insert(student_ref=leader, group_ref=db.groups[group_ref])
-    return response.json('create group ' + group_ref.id + ' success')
+    return response.json('create group success')
 
 
 @auth.requires_login()
@@ -227,8 +227,8 @@ def set_group_status():
     group_id = request.vars.group_id
     student = auth.user
 
-    if db(
-                            db.group_students.group_ref == group_id and db.group_students.student_ref == student.id).select().first() is None:
+    if db(db.group_students.group_ref == group_id and
+                          db.group_students.student_ref == student.id).select().first() is None:
         raise HTTP(401)
 
     new_status = request.vars.new_status
@@ -282,6 +282,9 @@ def response_group(g):
         name=g.name,
         status=g.status,
         new_status='',
+        is_leader=True if auth.user.id == g.leader_ref.id else False,
+        is_group=True if db(db.group_students.group_ref == g.id).select().find(
+            lambda row: row.student_ref == auth.user.id).first() is not None else False,
         members=[]
     )
 

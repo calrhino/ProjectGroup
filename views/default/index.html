@@ -71,7 +71,7 @@
                         <div v-if="create.new_project.edit">
                             name: <input type="text" v-model="create.new_project.name">
                             description: <textarea v-model="create.new_project.description"></textarea>
-                            <button class="btn" v-on:click="createProject">create project</button>
+                            <button class="btn" v-on:click="createProject(class_idx)">create project</button>
                         </div>
                     </div>
 
@@ -83,6 +83,24 @@
                             <div>${project.description}</div>
 
                             <div v-if="sel_project==project_idx">
+
+                                <div v-on:click.stop>
+                                    <transition>
+                                        <button v-if="create.new_group.edit" class="btn"
+                                                v-on:click="toggleCreateGroup">cancel
+                                        </button>
+                                        <button v-else class="btn" v-on:click="toggleCreateGroup">create group
+                                        </button>
+                                    </transition>
+                                    <div v-if="create.new_group.edit">
+                                        name: <input type="text" v-model="create.new_group.name">
+                                        description: <textarea v-model="create.new_group.description"></textarea>
+                                        <button class="btn" v-on:click="createGroup(class_idx, project_idx)">
+                                            create group
+                                        </button>
+                                    </div>
+                                </div>
+
                                 <div v-for="(group, group_idx) in project.groups">
                                     <div class="nested_el"
                                          v-on:click.stop="toggleGroup(group_idx, project_idx, class_idx)"
@@ -92,6 +110,7 @@
                                         <div>${group.description}</div>
                                         <div class="nested_el" v-if="sel_group==group_idx" v-on:click.stop>
                                             <span v-if="is_contact">To: </span>
+
                                             <span v-for="(member, member_idx) in group.members">
                                                 <span v-on:click.stop="toggleMember(member_idx)"
                                                       v-if="sel_member==-1||sel_member==member_idx">
@@ -103,6 +122,7 @@
                                             </button>
                                             <button class="btn" v-if="!is_contact" v-on:click="showContact">contact
                                             </button>
+
                                             <div class="nested_el" v-on:click.stop="toggleEditStatus">status:
                                                 ${group.status}
                                                 <textarea class="nested_el" v-on:click.stop v-if="is_edit_status"
@@ -112,6 +132,7 @@
                                                     set status
                                                 </button>
                                             </div>
+
                                             <div v-if="is_contact">
                                                 <hr class="nopad">
                                                 <textarea class="nested_el" v-model="user_message"></textarea>
@@ -121,11 +142,15 @@
                                                 </button>
                                                 <button class="btn" v-on:click.stop="hideContact">cancel</button>
                                             </div>
-                                            <button class="btn"
+                                            <button v-if="!group.is_group" class="btn"
                                                     v-on:click.stop="join_group(group_idx, project_idx, class_idx)">join
                                                 group
                                             </button>
-                                            <button class="btn"
+                                            <button v-if="group.is_leader" class="btn"
+                                                    v-on:click.stop="delete_group(group_idx, project_idx, class_idx)">
+                                                delete group
+                                            </button>
+                                            <button v-else class="btn"
                                                     v-on:click.stop="leave_group(group_idx, project_idx, class_idx)">
                                                 leave group
                                             </button>

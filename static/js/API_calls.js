@@ -80,6 +80,16 @@ function leave_group(group_id) {
     );
 }
 
+function delete_group(group_id) {
+    $.post(delete_group_url, {
+            group_id: group_id,
+        }, function (msg) {
+            console.log(msg);
+        }
+    );
+}
+
+
 
 function contact_member(member, msg) {
     $.post(contact_user_url,
