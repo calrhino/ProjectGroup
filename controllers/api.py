@@ -12,7 +12,6 @@ def get_all_classes():
     #    classes = classes.exclude(lambda row: row.id == e.id)
 
     response_classes = []
-    pr (classes)
 
     # get class from each relation (classes of student)
     for c in classes:
