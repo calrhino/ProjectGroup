@@ -9,44 +9,45 @@
 
 import datetime
 
-db.define_table('google_auth',
-                Field('user_id', 'text'),
-                Field('user_first','text'),
-                Field('user_last', 'text'), 
-                Field('user_image_link', 'text'),
-                Field('user_email', 'text'),
-                Field('user_id_token', 'string')
-                )
-
-db.define_table('students',
-                Field('google_auth_id', 'integer'),
-                )
-
 db.define_table('classes',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
-                Field('instructor_id', 'reference students')
+                Field('instructor_ref', 'reference auth_user')
                 )
 
 db.define_table('projects',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
-                Field('leader_id', 'reference students'),
-                Field('class_id', 'reference classes')
+                Field('class_ref', 'reference classes')
                 )
 
-db.define_table('proj_students',
-                Field('project_id', 'reference projects'),
-                Field('student_id', 'reference students')
+db.define_table('groups',
+                Field('name', 'text'),
+                Field('description', 'text', default=''),
+                Field('status', 'text', default='', length=100),
+                Field('leader_ref', 'reference auth_user'),
+                Field('project_ref', 'reference projects')
                 )
 
-db.define_table('stud_classes',
-                Field('student_id', 'reference students'),
-                Field('class_id', 'reference classes')
+db.define_table('group_students',
+                Field('student_ref', 'reference auth_user', ondelete="NO ACTION"),
+                Field('group_ref', 'reference groups', ondelete="NO ACTION")
+                , ondelete="NO ACTION"
                 )
 
+db.define_table('class_users',
+                Field('user_ref', 'reference auth_user', ondelete="NO ACTION"),
+                Field('class_ref', 'reference classes', ondelete="NO ACTION")
+                , ondelete="NO ACTION"
+                )
 
-db.proj_students.student_id.requires = IS_NOT_EMPTY()
-db.students.google_auth_id.requires = IS_NOT_EMPTY()
-db.projects.name.requires = IS_NOT_EMPTY()
+db.define_table('messages',
+                Field('sender_ref', 'reference auth_user'),
+                Field('receiver_ref', 'reference auth_user'),
+                Field('msg', 'string', length=200)
+                , ondelete="NO ACTION"
+                )
+
+db.groups.name.requires = IS_NOT_EMPTY()
 db.classes.name.requires = IS_NOT_EMPTY()
+db.projects.name.requires = IS_NOT_EMPTY()
