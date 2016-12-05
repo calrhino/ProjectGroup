@@ -49,10 +49,9 @@ def _():
     # useful links to internal and external resources
     # ------------------------------------------------------------------------------------------------------------------
     response.menu += [
-        # (T('My Sites'), False, URL('admin', 'default', 'site')),
+        # email to contact us 
         (T('Help'), False, '#', [
-            (T('Contact Us'), False,'mailto:cohau@ucsc.edu'),
-            LI(_class="divider"),
+            (T('Contact Us'), False,'mailto:cohau@ucsc.edu;jawchan@ucsc.edu'),
         ]),
         (T('Documentation'), False, '#', [
             (T('Online book'), False, 'http://www.web2py.com/book'),

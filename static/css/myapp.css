@@ -25,9 +25,14 @@
 	width: 100px;
 }
 
-.body {
-	background-image: url("https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg");
+.header{
+    background-image: url("https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg");
 }
+
+.body {
+	background-color: black;
+}
+
 /*The looks of the Login and Sign up Button*/
 .button {
 	background-color: #4CAF50; /* Green */
@@ -45,7 +50,7 @@
     cursor: pointer;
 }
 
-/*.jumbotron {
-height: 500px;
-background-image: url('http://goo.gl/04j7Nn')
-}*/
+.jumbotron {
+    height: 100px;
+    width: 100px;
+}

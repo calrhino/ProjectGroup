@@ -1,3 +1,9 @@
+<!-- ##################### -->
+<!-- This is the index.js pages that shows the front page when the user isn't logged in and allows the user to login via Google -->
+<!-- ##################### -->
+
+
+<!-- Goes to welcome page if the user is already logged in -->
 <script>
     if ("{{=('welcome' if auth.user is not None else None)}}" == 'welcome') {
         window.location.replace("{{=URL('default', 'welcome')}}");
@@ -6,45 +12,44 @@
 {{extend 'layout.html'}}
 <div id="main_content">
     <body>
-    <header class="text-center">
-        <!-- <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg" style="width: 304px; height: 228px;">
-        	<div v-on:click="http://localhost:8000/ProjectGroup/default/index" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>  -->
+        <header class="text-center">
+            <!-- The front page of the app -->
+            <div class="jumbotron"><h1 style="color: black;">Project Groups</h1></div>
+            <h3> Making Great Projects </h3>
+            <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
+                style="width: 304px; height: 228px;">
 
-        <div class="jumbotron"><h1 style="color: black;">Project Groups</h1></div>
-        <h3> Making Great Projects </h3>
-        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
-             style="width: 304px; height: 228px;">
-
-        <div style="text-align: center;">
-            <a href="{{=URL('default','welcome')}}">
-                <button class="button"
+            <div style="text-align: center;">
+                <a href="{{=URL('default','welcome')}}">
+                    <button class="button"
                         onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
                         id="loginButton"> Login with your Google Account
-                </button>
-            </a>
-            <!-- http://theprojectgroup.pythonanywhere.com/init/default/user/logins -->
+                    </button>
+                </a>
 
-            <a href="{{=URL('default','welcome')}}">
-                <button class="button"
+                <a href="{{=URL('default','welcome')}}">
+                    <button class="button"
                         onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
                         id="loginButton"> Sign Up
-                </button>
-            </a>
+                    </button>
+                </a>
+            </div>
 
-        </div>
-
-        <!--  <a href="{{=URL('default', 'welcome')}}">
-            <button v-on:click="http://localhost:8000/ProjectGroup/default/welcome"> Go next </button>
-        </a> -->
-    </header>
+            <div style="text-align: center;">
+                <a href="#bottom"><button class="button">How to use Project Groups?</button></a>
+            </div>
+        </header>
     </body>
 
+    <!-- The bottom of the index.js images and instructions text  -->
     <body>
     <div class="text-center">
+        <a name="bottom"></a>
         <h2 style="color:blue;">
             How to use Project Groups?
         </h2>
     </div>
+
     <div align="center">
         <img src="https://yt3.ggpht.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/s900-c-k-no-mo-rj-c0xffffff/photo.jpg"
              style="width: 250px; height: 228px; float:left" alt="" align="right">
@@ -61,6 +66,7 @@
     <div style="float: right"><h4>Create/Join a Project</h4></div>
     <div style="margin: 0 auto; width: 200px;"><h4>Create/Select a Class</h4></div>
 
+    <!-- The motivation quote -->
     <div style="margin: 0 auto; width: 500px;">
         <h4><p style="margin-top: 3.5em"><i>"Individual commitment to a group effort--that is what makes a team work, a
             company work, a society work, a civilization work." --Vince Lombardi
@@ -70,11 +76,11 @@
 
     </body>
 </div>
-<script>
+<!-- <script>
 
     $(document).ready(function () {
         if ("{{=('welcome' if auth.user is not None else None)}}" == 'welcome') {
             window.location.replace("{{=URL('default', 'welcome')}}");
         }
     });
-</script>
+</script> -->

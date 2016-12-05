@@ -1,4 +1,5 @@
 # database retrieve information for client ------ -------------------------------------------------
+
 @auth.requires_login()
 def get_all_classes():
     """get the classes not associated with a user"""
