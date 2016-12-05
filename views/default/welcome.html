@@ -54,10 +54,10 @@
                             </button>
                             <button v-else class="btn" v-on:click="toggleCreateProject">create project</button>
                         </transition>
-                        <div v-if="create.new_project.edit">
-                            name: <input type="text" v-model="create.new_project.name">
-                            description: <textarea v-model="create.new_project.description"></textarea>
-                            <button class="btn" v-on:click="createProject(class_idx)">create project</button>
+                        <div v-if="create.new_project.edit" style="margin-top: 1.5em">
+                            <div>Project Name: <input type="text" v-model="create.new_project.name"></div>
+                            <div style="margin-top: 1.5em">Project Description: <textarea v-model="create.new_project.description"></textarea></div>
+                            <div style="margin-top: 1.5em"><button class="btn" v-on:click="createProject(class_idx)">create project</button></div>
                         </div>
                     </div>
 
@@ -78,10 +78,10 @@
                                         <button v-else class="btn" v-on:click="toggleCreateGroup">create group
                                         </button>
                                     </transition>
-                                    <div v-if="create.new_group.edit">
-                                        <div>Project Name: <input type="text" v-model="create.new_group.name"></div>
-                                        <div>Project Description: <textarea v-model="create.new_group.description"></textarea></div>
-                                        <div><button class="btn" v-on:click="createGroup(class_idx, project_idx)">
+                                    <div v-if="create.new_group.edit" style="margin-top: 1.5em">
+                                        <div>Group Name: <input type="text" v-model="create.new_group.name"></div>
+                                        <div style="margin-top: 1.5em">Group Description: <textarea v-model="create.new_group.description"></textarea></div>
+                                        <div style="margin-top: 1.5em"><button class="btn" v-on:click="createGroup(class_idx, project_idx)">
                                             create group
                                         </button></div>
                                     </div>
@@ -176,10 +176,10 @@
             <button v-if="create.new_class.edit" class="btn" v-on:click="toggleCreateClass">cancel</button>
             <button v-else class="btn" v-on:click="toggleCreateClass">create class</button>
         </transition>
-        <div v-if="create.new_class.edit">
+        <div v-if="create.new_class.edit" style="margin-top: 1.5em">
             <div>Class Name: <input type="text" v-model="create.new_class.name"></div>
-            <div>Class Description: <textarea v-model="create.new_class.description"></textarea></div>
-            <div><button class="btn" v-on:click="createClass">create class</button></div>
+            <div style="margin-top: 1.5em">Class Description: <textarea v-model="create.new_class.description"></textarea></div>
+            <div style="margin-top: 1.5em"><button class="btn" v-on:click="createClass">create class</button></div>
         </div>
         <div class="nested_el" v-for="(classe, class_idx) in allclasses">
             <div class="nopad">class: ${classe.name}</div>
