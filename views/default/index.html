@@ -17,7 +17,7 @@
         <div style="text-align: center;">
             <a href="{{=URL('default','welcome')}}">
                 <button class="button"
-                        onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';"
+                        onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
                         id="loginButton"> Login with your Google Account
                 </button>
             </a>
@@ -25,7 +25,7 @@
 
             <a href="{{=URL('default','welcome')}}">
                 <button class="button"
-                        onclick="location.href = 'http://localhost:8000/ProjectGroup/default/user/login';"
+                        onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
                         id="loginButton"> Sign Up
                 </button>
             </a>
