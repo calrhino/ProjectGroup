@@ -26,19 +26,10 @@
     var contact_user_url = "{{=URL('api', 'contact_user', user_signature=True)}}";
     var logged_in = "{{=(True if auth.user is not None else False)}}";
 </script>
-<script>
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            console.log('User signed out.');
-        });
-    }
-</script>
 {{end}}
 
 <div id="main_content" style="display:none">
     <div class="text-center">
-        <button on:click="{{=URL('default', 'index')}}" onclick="signOut();">Sign out</button>
         <button class="btn" v-on:click="setPage('loggedin')">enrolled classes</button>
         <button class="btn" v-on:click="setPage('mymessages')">messages</button>
         <button class="btn" v-on:click="setPage('joinclass')">join/create a class</button>
