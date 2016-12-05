@@ -1,38 +1,13 @@
 {{extend 'layout.html'}}
 
 {{block head}}
-<script src="{{=URL('static', 'js/vue.js')}}"></script>
-<script>
-    var logged_in_url = "{{=URL('api', 'logged_in', user_signature=True)}}";
-    var get_classes_url = "{{=URL('api', 'get_classes', user_signature=True)}}";
-    var get_projects_url = "{{=URL('api', 'get_projects', user_signature=True)}}";
-    var get_students_url = "{{=URL('api', 'get_students', user_signature=True)}}";
-    var add_student_url = "{{=URL('api', 'add_student', user_signature=True)}}";
-    var delete_student_url = "{{=URL('api', 'delete_student', user_signature=True)}}";
-    var create_class_url = "{{=URL('api', 'create_class', user_signature=True)}}";
-    var leave_class_url = "{{=URL('api', 'leave_class', user_signature=True)}}";
-    var join_class_url = "{{=URL('api', 'join_class', user_signature=True)}}";
-    var delete_class_url = "{{=URL('api', 'delete_class', user_signature=True)}}";
-    var create_project_url = "{{=URL('api', 'create_project', user_signature=True)}}";
-    var join_project_url = "{{=URL('api', 'join_project', user_signature=True)}}";
-    var leave_project_url = "{{=URL('api', 'leave_project', user_signature=True)}}";
-</script>
-<script>
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            console.log('User signed out.');
-        });
-    }
-</script>
-{{end}}
 
-<div id="main_content">
+<!-- <div id="main_content"> -->
 
     <!-- <div v-if="logged_in"> -->
         <!-- <a href="{{=URL('default', 'welcome')}}" onclick="signOut();">Sign out</a> -->
         <!-- <button on:click="http://localhost:8000/ProjectGroup/default/index" onclick="signOut();">Sign out</button> -->
-        <h2> The Groups </h2>
+<!--         <h2> The Groups </h2>
         <h2> 
             <button>Create the Class </button>
         </h2>
@@ -77,29 +52,7 @@
             </div>
         </div>
 
-</div>
-
-<!-- {{if 'message' in globals():}}
-<h2>{{=message}}</h2>
-<p class="lead">{{=T('How did you get here?')}}</p>
-<ol>
-    <li>{{=T('You are successfully running web2py')}}</li>
-    <li>{{=XML(T('You visited the url %s', A(request.env.path_info,_href=request.env.path_info)))}}</li>
-    <li>{{=XML(T('Which called the function %s located in the file %s',
-(A(request.function+'()',_href='#'),
-A('web2py/applications/%(application)s/controllers/%(controller)s.py' % request,
-_href=URL('admin','default','peek', args=(request.application,'controllers',request.controller+'.py'))))))}}</li>
-    <li>{{=XML(T('The output of the file is a dictionary that was rendered by the view %s',
-A('web2py/applications/%(application)s/views/%(controller)s/index.html' % request,
-_href=URL('admin','default','peek',args=(request.application,'views',request.controller,'index.html')))))}}</li>
-    <li>{{=T('You can modify this application and adapt it to your needs')}}</li>
-</ol>
-{{elif 'content' in globals():}}
-{{=content}}
-{{else:}}
-{{=BEAUTIFY(response._vars)}}
-{{pass}}
- -->
+</div> -->
 
 {{block right_sidebar}}
 <div id="user_profile" class="nested_el" v-if="is_show">
@@ -119,3 +72,228 @@ _href=URL('admin','default','peek',args=(request.application,'views',request.con
 
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 <script src="{{=URL('static','js/API_calls.js')}}"></script>
+
+
+
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var get_all_classes_url = "{{=URL('api', 'get_all_classes', user_signature=True)}}";
+    var get_messages_url = "{{=URL('api', 'get_messages', user_signature=True)}}";
+    var get_classes_url = "{{=URL('api', 'get_classes', user_signature=True)}}";
+    var get_projects_url = "{{=URL('api', 'get_projects', user_signature=True)}}";
+    var get_groups_url = "{{=URL('api', 'get_groups', user_signature=True)}}";
+    var get_members_url = "{{=URL('api', 'get_members', user_signature=True)}}";
+    var get_students_url = "{{=URL('api', 'get_students', user_signature=True)}}";
+    var add_student_url = "{{=URL('api', 'add_student', user_signature=True)}}";
+    var delete_student_url = "{{=URL('api', 'delete_student', user_signature=True)}}";
+    var create_class_url = "{{=URL('api', 'create_class', user_signature=True)}}";
+    var leave_class_url = "{{=URL('api', 'leave_class', user_signature=True)}}";
+    var join_class_url = "{{=URL('api', 'join_class', user_signature=True)}}";
+    var delete_class_url = "{{=URL('api', 'delete_class', user_signature=True)}}";
+    var create_project_url = "{{=URL('api', 'create_project', user_signature=True)}}";
+    var join_project_url = "{{=URL('api', 'join_project', user_signature=True)}}";
+    var leave_project_url = "{{=URL('api', 'leave_project', user_signature=True)}}";
+    var create_group_url = "{{=URL('api', 'create_group', user_signature=True)}}";
+    var join_group_url = "{{=URL('api', 'join_group', user_signature=True)}}";
+    var leave_group_url = "{{=URL('api', 'leave_group', user_signature=True)}}";
+    var set_group_status_url = "{{=URL('api', 'set_group_status', user_signature=True)}}";
+    var contact_user_url = "{{=URL('api', 'contact_user', user_signature=True)}}";
+    var logged_in = "{{=(True if auth.user is not None else False)}}";
+</script>
+<script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
+    }
+</script>
+{{end}}
+
+<div id="main_content">
+    <header v-if="page=='welcome'" class="text-center">
+        <div class="jumbotron"><h1>Welcome to Project Groups</h1></div>
+        <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
+             style="width: 304px; height: 228px;">
+        <div v-on:click="setPage('loggedin')" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    </header>
+    <div>
+        <button class="btn" v-on:click="setPage('loggedin')">enrolled classes</button>
+        <button class="btn" v-on:click="setPage('mymessages')">messages</button>
+        <button class="btn" v-on:click="setPage('joinclass')">join/create a class</button>
+        <button class="btn" v-on:click="updatePage(page)">update current page</button>
+    </div>
+    <div v-if="page=='loggedin'">
+        <!-- <div v-if="logged_in"> -->
+        <!-- <a href="{{=URL('default', 'welcome')}}" onclick="signOut();">Sign out</a> -->
+        <a v-on:click="setPage('welcome')" onclick="signOut();">Sign out</a>
+
+        <div v-for="(classe, class_idx) in classes">
+            <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)"
+                 v-if="sel_class==-1||sel_class==class_idx">
+                <div class="nopad">class: ${classe.name}</div>
+                <hr class="nopad">
+                <div>${classe.description}</div>
+
+                <div v-if="sel_class==class_idx">
+                    <div v-if="classe.is_instructor" v-on:click.stop>
+                        <transition>
+                            <button v-if="create.new_project.edit" class="btn" v-on:click="toggleCreateProject">cancel
+                            </button>
+                            <button v-else class="btn" v-on:click="toggleCreateProject">create project</button>
+                        </transition>
+                        <div v-if="create.new_project.edit">
+                            name: <input type="text" v-model="create.new_project.name">
+                            description: <textarea v-model="create.new_project.description"></textarea>
+                            <button class="btn" v-on:click="createProject(class_idx)">create project</button>
+                        </div>
+                    </div>
+
+                    <div v-for="(project, project_idx) in classe.projects">
+                        <div class="nested_el" v-on:click.stop="toggleProject(project_idx, class_idx)"
+                             v-if="sel_project==-1||sel_project==project_idx">
+                            <div class="nopad">project: ${project.name}</div>
+                            <hr class="nopad">
+                            <div>${project.description}</div>
+
+                            <div v-if="sel_project==project_idx">
+
+                                <div v-on:click.stop>
+                                    <transition>
+                                        <button v-if="create.new_group.edit" class="btn"
+                                                v-on:click="toggleCreateGroup">cancel
+                                        </button>
+                                        <button v-else class="btn" v-on:click="toggleCreateGroup">create group
+                                        </button>
+                                    </transition>
+                                    <div v-if="create.new_group.edit">
+                                        name: <input type="text" v-model="create.new_group.name">
+                                        description: <textarea v-model="create.new_group.description"></textarea>
+                                        <button class="btn" v-on:click="createGroup(class_idx, project_idx)">
+                                            create group
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div v-for="(group, group_idx) in project.groups">
+                                    <div class="nested_el"
+                                         v-on:click.stop="toggleGroup(group_idx, project_idx, class_idx)"
+                                         v-if="sel_group==-1||sel_group==group_idx">
+                                        <div class="nopad">group: ${group.name}</div>
+                                        <hr class="nopad">
+                                        <div>${group.description}</div>
+                                        <div class="nested_el" v-if="sel_group==group_idx" v-on:click.stop>
+                                            <span v-if="is_contact">To: </span>
+
+                                            <span v-for="(member, member_idx) in group.members">
+                                                <span v-on:click.stop="toggleMember(member_idx)"
+                                                      v-if="sel_member==-1||sel_member==member_idx">
+                                                    <span :class="{user_el:member.is_user}" class="regular_el nopad">${member.name}</span>
+                                                </span>
+                                            </span>
+                                            <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">all
+                                                members
+                                            </button>
+                                            <button class="btn" v-if="!is_contact" v-on:click="showContact">contact
+                                            </button>
+
+                                            <div class="nested_el" v-on:click.stop="toggleEditStatus">status:
+                                                ${group.status}
+                                                <textarea class="nested_el" v-on:click.stop v-if="is_edit_status"
+                                                          v-model="group.new_status"></textarea>
+                                                <button class="btn" v-if="is_edit_status"
+                                                        v-on:click.stop="setGroupStatus(class_idx, project_idx, group_idx)">
+                                                    set status
+                                                </button>
+                                            </div>
+
+                                            <div v-if="is_contact">
+                                                <hr class="nopad">
+                                                <textarea class="nested_el" v-model="user_message"></textarea>
+                                                <button class="btn"
+                                                        v-on:click.stop="contactMembers(class_idx, project_idx, group_idx)">
+                                                    submit
+                                                </button>
+                                                <button class="btn" v-on:click.stop="hideContact">cancel</button>
+                                            </div>
+                                            <button v-if="!group.is_group" class="btn"
+                                                    v-on:click.stop="join_group(group_idx, project_idx, class_idx)">join
+                                                group
+                                            </button>
+                                            <button v-if="group.is_leader" class="btn"
+                                                    v-on:click.stop="delete_group(group_idx, project_idx, class_idx)">
+                                                delete group
+                                            </button>
+                                            <button v-else class="btn"
+                                                    v-on:click.stop="leave_group(group_idx, project_idx, class_idx)">
+                                                leave group
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button v-if="classe.is_instructor" class="btn" v-on:click.stop="delete_class(class_idx)">delete
+                        class
+                    </button>
+                    <button v-else class="btn" v-on:click.stop="leave_class(class_idx)">leave class</button>
+                </div>
+                <!--button class="btn" v-if="sel_class!=-1" v-on:click.stop="hideClass">hide groups</button-->
+            </div>
+        </div>
+    </div>
+
+    <div v-if="page=='mymessages'">
+        <div v-for="(msg, msg_idx) in messages">
+            <div class="nested_el">
+                <div>sender: ${msg.sender}</div>
+                <div>${msg.msg}</div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="page=='joinclass'">
+        <transition>
+            <button v-if="create.new_class.edit" class="btn" v-on:click="toggleCreateClass">cancel</button>
+            <button v-else class="btn" v-on:click="toggleCreateClass">create class</button>
+        </transition>
+        <div v-if="create.new_class.edit">
+            name: <input type="text" v-model="create.new_class.name">
+            description: <textarea v-model="create.new_class.description"></textarea>
+            <button class="btn" v-on:click="createClass">create class</button>
+        </div>
+        <div class="nested_el" v-for="(classe, class_idx) in allclasses">
+            <div class="nopad">class: ${classe.name}</div>
+            <hr class="nopad">
+            <div>${classe.description}</div>
+            <button class="btn" v-on:click="join_class(class_idx)">join class</button>
+        </div>
+    </div>
+</div>
+
+{{block right_sidebar}}
+<div id="user_profile" class="nested_el" v-if="is_show">
+    <button class="btn" v-on:click="toggleViewing">hide profile</button>
+    <button class="btn" title="Delete is Disabled" v-on:click="toggleDelete" v-if="!is_delete">enable delete</button>
+    <button class="btn" title="Delete is Enabled; Click on Traits to Delete" v-on:click="toggleDelete" v-if="is_delete">
+        disable delete
+    </button>
+    <button class="btn" v-on:click="toggleAdd" v-if="!is_add">add trait</button>
+    <button class="btn" v-on:click="toggleAdd" v-if="is_add">cancel</button>
+    <input type="text" v-if="is_add" v-model="trait_field">
+    <div class="nested_el">[insert profile pic]</div>
+    <span class="regular_el" v-for="(trait, index) in traits">${trait}</span>
+</div>
+{{end}}
+
+<script src="{{=URL('static','js/API_calls.js')}}"></script>
+<script src="{{=URL('static','js/default_index.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        if (logged_in == 'True') {
+            main_content.setPage('loggedin');
+        }
+    });
+</script>
+<!-- </div> -->
