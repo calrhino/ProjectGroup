@@ -286,12 +286,23 @@ var main_content = new Vue({
                 var members = this.classes[class_idx].projects[project_idx].groups[group_idx].members;
                 if (this.sel_member < 0) {
                     for (var i = 0, len = members.length; i < len; i++) {
-                        contact_member(members[i], this.user_message)
+                        this.contact_member(members[i], this.user_message)
                     }
                 } else {
-                    contact_member(members[this.sel_member], this.user_message);
+                    this.contact_member(members[this.sel_member], this.user_message);
                 }
                 this.hideContact();
+            },
+
+            contactMember: function (member, msg) {
+                $.post(contact_user_url,
+                    {
+                        id: member.id,
+                        msg: msg
+                    }, function (msg) {
+                        console.log(msg);
+                    }
+                );
             },
 
             join_class: function (class_idx) {
@@ -323,67 +334,48 @@ var main_content = new Vue({
                     }
                 );
             },
+            delete_project: function (class_idx, proj_idx) {
+                $.post(delete_project_url, {
+                    project_id: this.classes[class_idx].projects[proj_idx].id,
+                }, function (msg) {
+                    console.log(msg)
+                    main_content.classes[class_idx].projects.splice(proj_idx, 1);
+                });
+            },
             join_group: function (group_idx, proj_idx, class_idx) {
-                join_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
+                $.post(join_group_url, {
+                        group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
+                    }, function (data) {
+                        data.is_user = true;
+                        console.log(data);
+                        var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx]
+                        group.members.push(data);
+                        group.is_group = true;
+                    }
+                );
             },
             leave_group: function (group_idx, proj_idx, class_idx) {
-                leave_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
+                $.post(leave_group_url, {
+                        group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
+                    }, function (msg) {
+                        console.log(msg);
+                        var group = main_content.classes[class_idx].projects[proj_idx].groups[group_idx];
+                        for (var i = 0, len = group.members.length; i < len; i++)
+                            if (group.members[i].is_user == true)
+                                group.members.splice(i, 1);
+                        group.is_group = false;
+                    }
+                );
             },
             delete_group: function (group_idx, proj_idx, class_idx) {
-                delete_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
+                $.post(delete_group_url, {
+                        group_id: this.classes[class_idx].projects[proj_idx].groups[group_idx].id,
+                    }, function (msg) {
+                        console.log(msg);
+                        main_content.classes[class_idx].projects[proj_idx].groups.splice(group_idx, 1);
+                    }
+                );
             },
-
-
-            /*function join_class(class_id) {
-             console.log(class_id);
-
-             }
-
-             function leave_class(class_id) {
-
-             }
-
-             function delete_class(class_id) {
-
-             }
-
-             function join_group(group_id) {
-             $.post(join_group_url, {
-             group_id: group_id,
-             }, function (msg) {
-             console.log(msg);
-             }
-             );
-             }
-
-             function leave_group(group_id) {
-             $.post(leave_group_url, {
-             group_id: group_id,
-             }, function (msg) {
-             console.log(msg);
-             }
-             );
-             }
-
-             function delete_group(group_id) {
-             $.post(delete_group_url, {
-             group_id: group_id,
-             }, function (msg) {
-             console.log(msg);
-             }
-             );
-             }
-
-
-             function contact_member(member, msg) {
-             $.post(contact_user_url,
-             {
-             id: member.id,
-             msg: msg
-             }, function (msg) {
-             console.log(msg);
-             });
-             }*/
         },
     })
     ;

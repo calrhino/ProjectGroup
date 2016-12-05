@@ -17,9 +17,9 @@
     var join_class_url = "{{=URL('api', 'join_class', user_signature=True)}}";
     var delete_class_url = "{{=URL('api', 'delete_class', user_signature=True)}}";
     var create_project_url = "{{=URL('api', 'create_project', user_signature=True)}}";
-    var join_project_url = "{{=URL('api', 'join_project', user_signature=True)}}";
-    var leave_project_url = "{{=URL('api', 'leave_project', user_signature=True)}}";
+    var delete_project_url = "{{=URL('api', 'delete_project', user_signature=True)}}";
     var create_group_url = "{{=URL('api', 'create_group', user_signature=True)}}";
+    var delete_group_url = "{{=URL('api', 'delete_group', user_signature=True)}}";
     var join_group_url = "{{=URL('api', 'join_group', user_signature=True)}}";
     var leave_group_url = "{{=URL('api', 'leave_group', user_signature=True)}}";
     var set_group_status_url = "{{=URL('api', 'set_group_status', user_signature=True)}}";
@@ -140,6 +140,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button v-if="classe.is_instructor" class="btn"
+                                        v-on:click.stop="delete_project(class_idx, project_idx)">delete
+                                    project
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -181,7 +185,6 @@
     </div>
 </div>
 
-<script src="{{=URL('static','js/API_calls.js')}}"></script>
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 
 
