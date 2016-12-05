@@ -2,7 +2,7 @@
  * Created by jarrett on 11/12/16.
  */
 
-function extend (a, b) {
+function extend(a, b) {
     for (var i = 0; i < b.length; i++) {
         a.push(b[i]);
     }
@@ -123,19 +123,42 @@ var main_content = new Vue({
             },
             createClass: function () {
                 var obj = this.create.new_class;
-                create_class(obj.name, obj.description);
+                $.post(create_class_url, {
+                        name: obj.name,
+                        description: obj.description,
+                    }, function (data) {
+                        console.log(data);
+                        main_content.classes.push(data)
+                    }
+                );
                 this.hideCreateClass();
             },
             createProject: function (class_idx) {
                 var obj = this.create.new_project;
                 var id = this.classes[class_idx].id;
-                create_project(id, obj.name, obj.description);
+                $.post(create_project_url, {
+                        class_id: id,
+                        name: obj.name,
+                        description: obj.description,
+                    }, function (data) {
+                        console.log(data);
+                        main_content.classes[class_idx].projects.push(data);
+                    }
+                );
                 this.hideCreateProject();
             },
             createGroup: function (class_idx, proj_idx) {
                 var obj = this.create.new_group;
                 var id = this.classes[class_idx].projects[proj_idx].id;
-                create_group(id, obj.name, obj.description);
+                $.post(create_group_url, {
+                        project_id: id,
+                        name: obj.name,
+                        description: obj.description,
+                    }, function (data) {
+                        console.log(data);
+                        main_content.classes[class_idx].projects[proj_idx].groups.push(data);
+                    }
+                );
                 this.hideCreateGroup();
             },
 
@@ -272,13 +295,33 @@ var main_content = new Vue({
             },
 
             join_class: function (class_idx) {
-                join_class(this.allclasses[class_idx].id);
+                $.post(join_class_url, {
+                        class_id: this.allclasses[class_idx].id,
+                    }, function (data) {
+                        console.log(data);
+                        main_content.allclasses.splice(class_idx, 1);
+                        main_content.classes.unshift(data);
+                    }
+                );
             },
             leave_class: function (class_idx) {
-                leave_class(this.classes[class_idx].id);
+                $.post(leave_class_url, {
+                        class_id: this.classes[class_idx].id,
+                    }, function (msg) {
+                        console.log(msg);
+                        main_content.classes.splice(class_idx, 1);
+                    }
+                );
+                main_content.hideClass();
             },
             delete_class: function (class_idx) {
-                delete_class(this.classes[class_idx].id);
+                $.post(delete_class_url, {
+                        class_id: this.classes[class_idx].id,
+                    }, function (msg) {
+                        console.log(msg);
+                        main_content.classes.splice(class_idx, 1);
+                    }
+                );
             },
             join_group: function (group_idx, proj_idx, class_idx) {
                 join_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
@@ -289,6 +332,58 @@ var main_content = new Vue({
             delete_group: function (group_idx, proj_idx, class_idx) {
                 delete_group(this.classes[class_idx].projects[proj_idx].groups[group_idx].id);
             },
+
+
+            /*function join_class(class_id) {
+             console.log(class_id);
+
+             }
+
+             function leave_class(class_id) {
+
+             }
+
+             function delete_class(class_id) {
+
+             }
+
+             function join_group(group_id) {
+             $.post(join_group_url, {
+             group_id: group_id,
+             }, function (msg) {
+             console.log(msg);
+             }
+             );
+             }
+
+             function leave_group(group_id) {
+             $.post(leave_group_url, {
+             group_id: group_id,
+             }, function (msg) {
+             console.log(msg);
+             }
+             );
+             }
+
+             function delete_group(group_id) {
+             $.post(delete_group_url, {
+             group_id: group_id,
+             }, function (msg) {
+             console.log(msg);
+             }
+             );
+             }
+
+
+             function contact_member(member, msg) {
+             $.post(contact_user_url,
+             {
+             id: member.id,
+             msg: msg
+             }, function (msg) {
+             console.log(msg);
+             });
+             }*/
         },
     })
     ;

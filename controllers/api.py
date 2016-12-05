@@ -120,7 +120,7 @@ def create_class():
 
     class_ref = db.classes.insert(name=name, description=description, instructor_ref=instructor)
     db.class_users.insert(user_ref=instructor, class_ref=db.classes[class_ref])
-    return response.json('create class success')
+    return response.json(response_class(class_ref))
 
 
 @auth.requires_login()
@@ -129,8 +129,9 @@ def join_class():
     class_id = request.vars.class_id
     student = auth.user
 
-    db.class_users.insert(user_ref=student, class_ref=db.classes[class_id])
-    return response.json('join class ' + class_id + ' success')
+    cref = db.classes[class_id]
+    db.class_users.insert(user_ref=student, class_ref=cref)
+    return response.json(response_class(cref))
 
 
 @auth.requires_login()
@@ -167,7 +168,7 @@ def create_project():
     description = request.vars.description
 
     project_ref = db.projects.insert(name=name, description=description, class_ref=db.classes[class_id])
-    return response.json('create project success')
+    return response.json(response_project(project_ref))
 
 
 @auth.requires_login()
@@ -192,7 +193,7 @@ def create_group():
     group_ref = db.groups.insert(name=name, description=description, leader_ref=leader,
                                  project_ref=db.projects[project_id])
     db.group_students.insert(student_ref=leader, group_ref=db.groups[group_ref])
-    return response.json('create group success')
+    return response.json(response_group(group_ref))
 
 
 @auth.requires_login()
