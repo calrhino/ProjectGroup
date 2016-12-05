@@ -58,8 +58,6 @@ response.generic_patterns = ['*'] if request.is_local else []
 # -------------------------------------------------------------------------
 response.formstyle = myconf.get('forms.formstyle')  # or 'bootstrap3_stacked' or 'bootstrap2' or other
 response.form_label_separator = myconf.get('forms.separator') or ''
-#]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
 
 # -------------------------------------------------------------------------
 # (optional) optimize handling of static files
@@ -107,11 +105,14 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 # -------------------------------------------------------------------------
 # configure auth policy
 # -------------------------------------------------------------------------
+# disables changing password since it auth is by Google
+auth.settings.actions_disabled.append('change_password')
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Google Sign in
+
+# Google Sign in API
 from gluon.contrib.login_methods.oauth20_account import OAuthAccount
 from gluon.storage import Storage
 import os
@@ -125,6 +126,7 @@ except ImportError:
 class GoogleAccount(OAuthAccount):
     "OAuth 2.0 for Google"
 
+    # get the secrets from google-auth.json
     def __init__(self):
         with open(os.path.join(request.folder, 'private/google_auth.json'), 'rb') as f:
             gai = Storage(json.load(f)['web'])
@@ -134,7 +136,7 @@ class GoogleAccount(OAuthAccount):
                               scope='https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
                               approval_prompt='auto', state="auth_provider=google")
 
-
+    # get the user info from Google
     def get_user(self):
 
         token = self.accessToken()
