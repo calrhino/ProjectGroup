@@ -5,7 +5,7 @@ def get_all_classes():
     # exclude all relations between user and classes, pick remaining ones
     # This is really ... not so good use of resources :(
     classes = db(db.classes).select()
-    exclude = db(db.class_users.user_ref==auth.user).select()
+    exclude = db(db.class_users.user_ref == auth.user).select()
     for i, e in enumerate(exclude):
         classes = classes.exclude(lambda row: row.id == e)
     response_classes = []
@@ -14,6 +14,7 @@ def get_all_classes():
     for i, c in enumerate(classes):
         response_classes.append(response_class(c))
     return response.json(dict(classes=response_classes))
+
 
 @auth.requires_login()
 def get_messages():
@@ -109,9 +110,9 @@ def create_class():
     description = request.vars.description
     instructor = auth.user
 
-    class_id = db.classes.insert(name=name, description=description, instructor_ref=instructor)
-    db.class_users.insert(user_ref=instructor, class_ref=db.classes[class_id])
-    return response.json('create class ' + class_id + ' success')
+    class_ref = db.classes.insert(name=name, description=description, instructor_ref=instructor)
+    db.class_users.insert(user_ref=instructor, class_ref=db.classes[class_ref])
+    return response.json('create class success')
 
 
 @auth.requires_login()
@@ -130,10 +131,10 @@ def leave_class():
     class_id = request.vars.class_id
     student = auth.user
 
-    db(db.class_users.user_ref.id == student.id and db.class_users.class_ref.id == class_id).delete()
-    if db(db.class_users.class_ref.id == class_id).select().first() is None:
-        db(db.classes.id == class_id).delete()
-        return response.json('leave and remove class ' + class_id + ' success')
+    students = db(db.class_users.class_ref == class_id).select()
+    students = students.find(lambda row: row.user_ref == student.id)
+    id = students.first().id
+    db(db.class_users.id == id).delete()
     return response.json('leave class ' + class_id + ' success')
 
 
@@ -141,6 +142,8 @@ def leave_class():
 def delete_class():
     """delete a class"""
     class_id = request.vars.class_id
+    auth_instructor_class(class_id)
+
     db(db.classes.id == class_id).delete()
     return response.json('delete class ' + class_id + ' success')
 
@@ -155,31 +158,8 @@ def create_project():
     name = request.vars.name
     description = request.vars.description
 
-    project_id = db.projects.insert(name=name, description=description, class_ref=db.classes[class_id])
-    return response.json('create project ' + project_id + ' success')
-
-
-@auth.requires_login()
-def join_project():
-    """a student joins a project"""
-    project_id = request.vars.project_id
-    student = auth.user
-
-    db.proj_students.insert(student_ref=student, project_ref=db.projects[project_id])
-    return response.json('join project ' + project_id + ' success')
-
-
-@auth.requires_login()
-def leave_project():
-    """a student leaves a project"""
-    project_id = request.vars.project_id
-    student = auth.user
-
-    db(db.proj_students.student_ref == student and db.proj_students.project_ref.id == project_id).delete()
-    if db(db.class_users.project_ref.id == project_id).select().first() is None:
-        db(db.projects.id == project_id).delete()
-        return response.json('leave and remove project ' + project_id + ' success')
-    return response.json('leave project ' + project_id + ' success')
+    project_ref = db.projects.insert(name=name, description=description, class_ref=db.classes[class_id])
+    return response.json('create project ' + project_ref.id + ' success')
 
 
 @auth.requires_login()
@@ -201,10 +181,10 @@ def create_group():
     description = request.vars.description
     leader = auth.user
 
-    group_id = db.groups.insert(name=name, description=description, leader_ref=leader,
-                                project_ref=db.projects[project_id])
-    db.group_students.insert(student_ref=leader, group_ref=db.groups[group_id])
-    return response.json('create group ' + group_id + ' success')
+    group_ref = db.groups.insert(name=name, description=description, leader_ref=leader,
+                                 project_ref=db.projects[project_id])
+    db.group_students.insert(student_ref=leader, group_ref=db.groups[group_ref])
+    return response.json('create group ' + group_ref.id + ' success')
 
 
 @auth.requires_login()
@@ -223,10 +203,10 @@ def leave_group():
     group_id = request.vars.group_id
     student = auth.user
 
-    db(db.group_students.group_ref.id == group_id and db.group_students.student_ref == student).delete()
-    if (db(db.group_students.group_ref.id == group_id).select().first() is None):
-        db(db.groups.id == group_id).delete()
-        return response.json('leave and remove group ' + group_id + ' success')
+    students = db(db.group_students.group_ref == group_id).select()
+    students = students.find(lambda row: row.student_ref == student.id)
+    id = students.first().id
+    db(db.group_students.id == id).delete()
     return response.json('leave group ' + group_id + ' success')
 
 
@@ -247,7 +227,8 @@ def set_group_status():
     group_id = request.vars.group_id
     student = auth.user
 
-    if db(db.group_students.group_ref == group_id and db.group_students.student_ref == student.id).select().first() is None:
+    if db(
+                            db.group_students.group_ref == group_id and db.group_students.student_ref == student.id).select().first() is None:
         raise HTTP(401)
 
     new_status = request.vars.new_status
@@ -264,6 +245,7 @@ def contact_user():
     db.messages.insert(sender_ref=sender, receiver_ref=receiver, msg=request.vars.msg)
     return response.json('send message to ' + receiver.first_name + ' success')
 
+
 # other methods  -------------------------------- -------------------------------------------------
 # check if the vars exist
 def assert_vars(*vars):
@@ -279,6 +261,7 @@ def response_class(c):
         id=c.id,
         description=c.description,
         name=c.name,
+        is_instructor=True if auth.user.id == c.instructor_ref.id else False,
         projects=[],
     )
 
@@ -319,6 +302,7 @@ def response_message(m):
         sender_id=sref.id,
         msg=m.msg,
     )
+
 
 def pr(msg):
     print(msg)

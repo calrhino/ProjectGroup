@@ -46,7 +46,8 @@
     <div>
         <button class="btn" v-on:click="setPage('loggedin')">enrolled classes</button>
         <button class="btn" v-on:click="setPage('mymessages')">messages</button>
-        <button class="btn" v-on:click="setPage('joinclass')">join a class</button>
+        <button class="btn" v-on:click="setPage('joinclass')">join/create a class</button>
+        <button class="btn" v-on:click="updatePage(page)">update current page</button>
     </div>
     <div v-if="page=='loggedin'">
         <!-- <div v-if="logged_in"> -->
@@ -61,6 +62,19 @@
                 <div>${classe.description}</div>
 
                 <div v-if="sel_class==class_idx">
+                    <div v-if="classe.is_instructor" v-on:click.stop>
+                        <transition>
+                            <button v-if="create.new_project.edit" class="btn" v-on:click="toggleCreateProject">cancel
+                            </button>
+                            <button v-else class="btn" v-on:click="toggleCreateProject">create project</button>
+                        </transition>
+                        <div v-if="create.new_project.edit">
+                            name: <input type="text" v-model="create.new_project.name">
+                            description: <textarea v-model="create.new_project.description"></textarea>
+                            <button class="btn" v-on:click="createProject">create project</button>
+                        </div>
+                    </div>
+
                     <div v-for="(project, project_idx) in classe.projects">
                         <div class="nested_el" v-on:click.stop="toggleProject(project_idx, class_idx)"
                              v-if="sel_project==-1||sel_project==project_idx">
@@ -107,19 +121,30 @@
                                                 </button>
                                                 <button class="btn" v-on:click.stop="hideContact">cancel</button>
                                             </div>
+                                            <button class="btn"
+                                                    v-on:click.stop="join_group(group_idx, project_idx, class_idx)">join
+                                                group
+                                            </button>
+                                            <button class="btn"
+                                                    v-on:click.stop="leave_group(group_idx, project_idx, class_idx)">
+                                                leave group
+                                            </button>
                                         </div>
-                                        <!--button class="btn" v-if="sel_group!=-1" v-on:click.stop="hideGroup">hide group
-                                        </button-->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <button v-if="classe.is_instructor" class="btn" v-on:click.stop="delete_class(class_idx)">delete
+                        class
+                    </button>
+                    <button v-else class="btn" v-on:click.stop="leave_class(class_idx)">leave class</button>
                 </div>
                 <!--button class="btn" v-if="sel_class!=-1" v-on:click.stop="hideClass">hide groups</button-->
             </div>
         </div>
     </div>
+
     <div v-if="page=='mymessages'">
         <div v-for="(msg, msg_idx) in messages">
             <div class="nested_el">
@@ -128,8 +153,18 @@
             </div>
         </div>
     </div>
+
     <div v-if="page=='joinclass'">
-        <div v-for="(classe, class_idx) in allclasses">
+        <transition>
+            <button v-if="create.new_class.edit" class="btn" v-on:click="toggleCreateClass">cancel</button>
+            <button v-else class="btn" v-on:click="toggleCreateClass">create class</button>
+        </transition>
+        <div v-if="create.new_class.edit">
+            name: <input type="text" v-model="create.new_class.name">
+            description: <textarea v-model="create.new_class.description"></textarea>
+            <button class="btn" v-on:click="createClass">create class</button>
+        </div>
+        <div class="nested_el" v-for="(classe, class_idx) in allclasses">
             <div class="nopad">class: ${classe.name}</div>
             <hr class="nopad">
             <div>${classe.description}</div>

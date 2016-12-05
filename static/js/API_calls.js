@@ -30,29 +30,20 @@ function leave_class(class_id) {
     );
 }
 
+function delete_class(class_id) {
+    $.post(delete_class_url, {
+            class_id: class_id,
+        }, function (msg) {
+            console.log(msg);
+        }
+    );
+}
+
 function create_project(class_id, name, desc) {
     $.post(create_project_url, {
             class_id: class_id,
             name: name,
             description: desc,
-        }, function (msg) {
-            console.log(msg);
-        }
-    );
-}
-
-function join_project(project_id) {
-    $.post(join_project_url, {
-            project_id: project_id,
-        }, function (msg) {
-            console.log(msg);
-        }
-    );
-}
-
-function leave_project(project_id) {
-    $.post(leave_project_url, {
-            project_id: project_id,
         }, function (msg) {
             console.log(msg);
         }

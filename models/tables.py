@@ -24,30 +24,28 @@ db.define_table('projects',
 db.define_table('groups',
                 Field('name', 'text'),
                 Field('description', 'text', default=''),
-                Field('status', 'text', default=''),
+                Field('status', 'text', default='', length=100),
                 Field('leader_ref', 'reference auth_user'),
                 Field('project_ref', 'reference projects')
                 )
 
 db.define_table('group_students',
-                Field('student_ref', 'reference auth_user'),
-                Field('group_ref', 'reference groups'),
-                )
-
-db.define_table('proj_students',
-                Field('student_ref', 'reference auth_user'),
-                Field('project_ref', 'reference projects')
+                Field('student_ref', 'reference auth_user', ondelete="NO ACTION"),
+                Field('group_ref', 'reference groups', ondelete="NO ACTION")
+                , ondelete="NO ACTION"
                 )
 
 db.define_table('class_users',
-                Field('user_ref', 'reference auth_user'),
-                Field('class_ref', 'reference classes')
+                Field('user_ref', 'reference auth_user', ondelete="NO ACTION"),
+                Field('class_ref', 'reference classes', ondelete="NO ACTION")
+                , ondelete="NO ACTION"
                 )
 
 db.define_table('messages',
                 Field('sender_ref', 'reference auth_user'),
                 Field('receiver_ref', 'reference auth_user'),
-                Field('msg', 'string')
+                Field('msg', 'string', length=200)
+                , ondelete="NO ACTION"
                 )
 
 db.groups.name.requires = IS_NOT_EMPTY()
