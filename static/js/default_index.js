@@ -18,7 +18,6 @@ var main_content = new Vue({
             sel_project: -1,
             sel_group: -1,
             sel_member: -1,
-            sel_user_img: -1,
             user_message: '',
             is_contact: false,
             is_edit_status: false,
@@ -210,8 +209,9 @@ var main_content = new Vue({
                 }
             },
             toggleGroup: function (group_idx, proj_idx, class_idx) {
-                if (this.sel_group == group_idx)
+                if (this.sel_group == group_idx) {
                     this.hideGroup();
+                }
                 else {
                     if (this.classes[class_idx].projects[proj_idx].groups[group_idx].members[0] == null) {
                         this.getMembers(class_idx, proj_idx, group_idx);
@@ -224,9 +224,6 @@ var main_content = new Vue({
                     this.showAllMember()
                 else
                     this.sel_member = idx;
-            },
-            showUserImage: function (idx) {
-                this.sel_user_img = idx;
             },
             toggleEditStatus: function () {
                 this.is_edit_status = !this.is_edit_status;
@@ -284,9 +281,6 @@ var main_content = new Vue({
                 this.create.new_group.name = '';
                 this.create.new_group.description = '';
                 this.create.new_group.edit = false;
-            },
-            hideUserImage: function () {
-                this.sel_user_img = -1;
             },
 
 
