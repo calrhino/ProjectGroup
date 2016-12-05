@@ -46,7 +46,8 @@
 </div>
 <script>
     $(document).ready(function(){
-        if ("{{=('welcome' if auth.user is not None else None)}}"=='welcome')
-            window.location.replace({{=URL('default', 'welcome')}});
+        if ("{{=('welcome' if auth.user is not None else None)}}"=='welcome'){
+            window.location.replace("{{=URL('default', 'welcome')}}");
+        }
     });
 </script>

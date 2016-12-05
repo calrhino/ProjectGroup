@@ -36,7 +36,7 @@
 </script>
 {{end}}
 
-<div id="main_content">
+<div id="main_content" style="display:none">
     <div class="text-center">
         <button on:click="{{=URL('default', 'index')}}" onclick="signOut();">Sign out</button>
         <button class="btn" v-on:click="setPage('loggedin')">enrolled classes</button>
@@ -192,3 +192,8 @@
 
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 <script src="{{=URL('static','js/API_calls.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        $("#main_content").show();
+    });
+</script>
