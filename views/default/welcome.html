@@ -181,11 +181,13 @@
     </div>
 </div>
 
-<script src="{{=URL('static','js/default_index.js')}}"></script>
 <script src="{{=URL('static','js/API_calls.js')}}"></script>
+<script src="{{=URL('static','js/default_index.js')}}"></script>
+
 
 <script>
     $(document).ready(function () {
         $("#main_content").show();
+        main_content.setPage('loggedin');
     });
 </script>

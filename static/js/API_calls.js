@@ -90,7 +90,6 @@ function delete_group(group_id) {
 }
 
 
-
 function contact_member(member, msg) {
     $.post(contact_user_url,
         {
