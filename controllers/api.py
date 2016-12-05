@@ -203,7 +203,7 @@ def join_group():
     student = auth.user
 
     db.group_students.insert(student_ref=student, group_ref=db.groups[group_id])
-    return response.json('join group ' + group_id + ' success')
+    return response.json(response_member(auth.user))
 
 
 @auth.requires_login()
