@@ -30,18 +30,14 @@
     var logged_in = "{{=(True if auth.user is not None else False)}}";
 </script>
 {{end}}
-<style>
-body {
-    background-image: url("https://static.vecteezy.com/system/resources/previews/000/094/491/original/polygonal-texture-background-vector.jpg");
-}
-</style>
-<body>
+
 <div id="main_content" style="display:none">
     <div class="text-center">
         <button class="button" v-on:click="setPage('loggedin')">enrolled classes</button>
         <button class="button" v-on:click="setPage('mymessages')">messages</button>
         <button class="button" v-on:click="setPage('joinclass')">join/create a class</button>
         <button class="button" v-on:click="updatePage(page)">update current page</button>
+        <button class="button" v-on:click="change_background">change background</button>
     </div>
     <div v-if="page=='loggedin'">
 
@@ -207,7 +203,6 @@ body {
         </div>
     </div>
 </div>
-</bodu>
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 
 
@@ -216,4 +211,5 @@ body {
         $("#main_content").show();
         main_content.setPage('loggedin');
     });
+    $(document.body).addClass('bg0');
 </script>

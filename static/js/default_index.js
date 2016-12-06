@@ -14,6 +14,8 @@ var main_content = new Vue({
         unsafeDelimiters: ['!{', '}'],
         data: {
             page: 'welcome',
+            bg_idx: 0,
+            background: 'bg0',
             sel_class: -1,
             sel_project: -1,
             sel_group: -1,
@@ -380,6 +382,15 @@ var main_content = new Vue({
                 );
                 main_content.classes[class_idx].projects[proj_idx].groups.splice(group_idx, 1);
             },
+
+            change_background: function () {
+                $(document.body).removeClass(this.background);
+                this.bg_idx++;
+                if (this.bg_idx > 1)
+                    this.bg_idx = 0;
+                this.background = 'bg' + this.bg_idx
+                $(document.body).addClass(this.background);
+            }
         },
     })
     ;
