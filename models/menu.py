@@ -22,7 +22,7 @@ response.meta.generator = myconf.get('app.generator')
 # ----------------------------------------------------------------------------------------------------------------------
 # your http://google.com/analytics id
 # ----------------------------------------------------------------------------------------------------------------------
-response.google_analytics_id = None
+# response.google_analytics_id = None
 
 # ----------------------------------------------------------------------------------------------------------------------
 # this is the main application menu add/remove items as required

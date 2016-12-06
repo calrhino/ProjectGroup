@@ -49,6 +49,9 @@
 }
 
 .header {
+    margin :0 0 30px 0;
+    padding: 5px 0 0 0;
+    width: 100%;
     background-image: url("https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg");
 }
 

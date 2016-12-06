@@ -40,7 +40,7 @@
     </div>
     <div v-if="page=='loggedin'">
 
-        <div v-for="(classe, class_idx) in classes">
+        <div v-for="(classe, class_idx) in classes" style="margin-top: 1.5em">
             <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)"
                  v-if="sel_class==-1||sel_class==class_idx">
                 <div class="nopad">class: ${classe.name}</div>
@@ -91,7 +91,7 @@
                                     <div class="nested_el"
                                          v-on:click.stop="toggleGroup(group_idx, project_idx, class_idx)"
                                          v-if="sel_group==-1||sel_group==group_idx">
-                                        <div class="nopad">group: ${group.name}</div>
+                                        <div class="nopad">Group: ${group.name}</div>
                                         <hr class="nopad">
                                         <div>${group.description}</div>
                                         <div class="nested_el" v-if="sel_group==group_idx" v-on:click.stop>
@@ -162,9 +162,9 @@
     </div>
 
     <div v-if="page=='mymessages'">
-        <div v-for="(msg, msg_idx) in messages">
+        <div v-for="(msg, msg_idx) in messages" style="margin-top: 1.5em">
             <div class="nested_el">
-                <div>sender: ${msg.sender}</div>
+                <div>Sender: ${msg.sender}</div>
                 <div>${msg.msg}</div>
             </div>
         </div>
