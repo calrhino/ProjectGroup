@@ -386,7 +386,7 @@ var main_content = new Vue({
             change_background: function () {
                 $(document.body).removeClass(this.background);
                 this.bg_idx++;
-                if (this.bg_idx > 1)
+                if (this.bg_idx > 2)
                     this.bg_idx = 0;
                 this.background = 'bg' + this.bg_idx
                 $(document.body).addClass(this.background);

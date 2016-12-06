@@ -106,7 +106,7 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 # -------------------------------------------------------------------------
 # configure auth policy
 # -------------------------------------------------------------------------
-# disables changing password since it auth is by Google
+# disables changing register, change/request_reset password since it auth is by Google
 auth.settings.actions_disabled.append('register')
 auth.settings.actions_disabled.append('change_password')
 auth.settings.actions_disabled.append('request_reset_password')
@@ -115,7 +115,7 @@ auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# Google Sign in API
+# Google LOGIN in API
 from gluon.contrib.login_methods.oauth20_account import OAuthAccount
 from gluon.storage import Storage
 import os
@@ -160,13 +160,13 @@ class GoogleAccount(OAuthAccount):
 
         username = uinfo['id']
         
+        # Returns first_name, last_name, username, email, and the Profile image
         return dict(first_name = uinfo['given_name'],
                     last_name = uinfo['family_name'],
                     username = username,
                     email = uinfo['email'],
                     img_link = uinfo['picture'])
 
-# auth.settings.login_next = URL('loggedin')
 auth.settings.login_form = GoogleAccount()
 
 

@@ -1,4 +1,4 @@
-<!-- ##################### -->
+##################### -->
 <!-- This is the index.js pages that shows the front page when the user isn't logged in and allows the user to login via Google -->
 <!-- ##################### -->
 
@@ -10,21 +10,19 @@
     }
 </script>
 {{extend 'layout.html'}}
-<style>
-    body {
-        background-image: url("https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg");
-        background-position: center;
-    }
-</style>
+
+<!-- The main content for the starting up page -->
 <div id="main_content" background-color="blue">
     <body>
         <header class="text-center">
             <!-- The front page of the app -->
             <div class="jumbotron"><h1 style="color: black!important; text-shadow: none;">Project Groups</h1></div>
-            <h2><p style="margin-top: 5.0em;"> Helping to Make Great Projects <p></h2>
-            
+            <h3><p style="margin-top: 2.0em"> Making Great Projects <p></h3>
+            <img src="https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg"
+                style="width: 304px; height: 228px;">
 
-            <div style="text-align: center; margin-top: 10em">
+            <!-- The buttons to login, sign up, and how to use Project Groups -->
+            <div style="text-align: center;">
                 <a href="{{=URL('default','welcome')}}">
                     <button class="button"
                         onclick="location.href = '{{=URL('default', 'user', 'login')}}';"
@@ -40,14 +38,15 @@
                 </a>
             </div>
 
+            <!-- This button will allow the page to go down to the instructions -->
             <div style="text-align: center;">
                 <a href="#bottom"><button class="button">How to use Project Groups?</button></a>
             </div>
         </header>
     </body>
-</div>
 
     <!-- The bottom of the index.js images and instructions text  -->
+    <body>
     <div class="text-center">
         <a name="bottom"></a>
         <h2 style="color:blue; margin-top: 2.0em">
@@ -55,9 +54,10 @@
         </h2>
     </div>
 
-    <div align="center" style="margin-top:3.0em;">
-        <img src="https://avatars2.githubusercontent.com/u/1342004?v=3&s=400"
-             style="width: 250px; height: 228px; float:left; " alt="" align="right">
+    <!-- This shows the images of the application -->
+    <div align="center" style="margin-top:3.0em">
+        <img src="https://yt3.ggpht.com/-v0soe-ievYE/AAAAAAAAAAI/AAAAAAAAAAA/OixOH_h84Po/s900-c-k-no-mo-rj-c0xffffff/photo.jpg"
+             style="width: 250px; height: 228px; float:left" alt="" align="right">
 
         <img src="http://choc.convio.net/2016chocwalkfiles/images/join_team_bear.png" alt="" align="right"
              style="float: right">
@@ -67,9 +67,10 @@
             style="width: 300px; height: 228px;">
         </div>
     </div>
-    <div style="float: left; color: blue;"><h4>Create/Login your Google Account</h4></div>
-    <div style="float: right; color: blue;"><h4>Create/Join a Project</h4></div>
-    <div style="margin: 0 auto; width: 200px; color: blue;"><h4>Create/Select a Class</h4></div>
+    <!-- This shows the text under the image. -->
+    <div style="float: left"><h4>Create/Login your Google Account</h4></div>
+    <div style="float: right"><h4>Create/Join a Project</h4></div>
+    <div style="margin: 0 auto; width: 200px;"><h4>Create/Select a Class</h4></div>
 
     <!-- The motivation quote -->
     <div style="margin: 0 auto; width: 500px;">
@@ -77,3 +78,7 @@
             company work, a society work, a civilization work." --Vince Lombardi
             </p></i></h4>
     </div>
+
+
+    </body>
+</div>

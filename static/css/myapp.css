@@ -27,7 +27,7 @@
 }
 
 .nested_el, .regular_el {
-    background-image: url("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQOQzv6wLZZ5WgjfXl1J95irI3Px_-SPLRJhPrYNJxgn05WqN2XXQ");
+    background-color: lightgray;
 }
 
 .nested_el {
@@ -84,10 +84,14 @@
     height: 50px;
 }
 
+/*This supports the changing the background images*/
 .bg0 {
-    background-image: url("https://static.vecteezy.com/system/resources/previews/000/094/491/original/polygonal-texture-background-vector.jpg")!important;
+    background-image: url("http://media.istockphoto.com/vectors/seamless-pattern-background-white-vector-id508012000?k=6&m=508012000&s=170667a&w=0&h=-NEyE2BAlJqutLyrhD8fbgFUT6Ysd22OxpAZEfAIoZo=")!important;
 }
 
 .bg1 {
     background-color: black;
+}
+.bg2 {
+    background-image: url("https://static.vecteezy.com/system/resources/previews/000/094/491/original/polygonal-texture-background-vector.jpg");
 }
