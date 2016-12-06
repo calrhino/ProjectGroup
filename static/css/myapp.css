@@ -77,9 +77,17 @@
 }
 
 .card{
-    background-color: lightblue: 
+    background-color: lightblue;
 }
 
 .jumbotron {
     height: 50px;
+}
+
+.bg0 {
+    background-image: url("https://static.vecteezy.com/system/resources/previews/000/094/491/original/polygonal-texture-background-vector.jpg")!important;
+}
+
+.bg1 {
+    background-color: black;
 }
