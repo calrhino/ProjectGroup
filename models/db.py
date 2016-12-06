@@ -12,7 +12,7 @@ if request.global_settings.web2py_version < "2.14.1":
 # if SSL/HTTPS is properly configured and you want all HTTP requests to
 # be redirected to HTTPS, uncomment the line below:
 # -------------------------------------------------------------------------
-#request.requires_https()
+# request.requires_https()
 
 # -------------------------------------------------------------------------
 # app configuration made easy. Look inside private/appconfig.ini
@@ -34,7 +34,7 @@ if not request.env.web2py_runtime_gae:
              check_reserved=['all'])
 else:
     # ---------------------------------------------------------------------
-    # connect to Google BigTable (optional 'google:datastore://namespace')
+    # connect to Google BigTable (optional# 'google:datastore://namespace')
     # ---------------------------------------------------------------------
     db = DAL('google:datastore+ndb')
     # ---------------------------------------------------------------------
@@ -107,6 +107,7 @@ mail.settings.ssl = myconf.get('smtp.ssl') or False
 # configure auth policy
 # -------------------------------------------------------------------------
 # disables changing password since it auth is by Google
+auth.settings.actions_disabled.append('register')
 auth.settings.actions_disabled.append('change_password')
 auth.settings.actions_disabled.append('request_reset_password')
 auth.settings.registration_requires_verification = False

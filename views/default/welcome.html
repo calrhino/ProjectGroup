@@ -30,20 +30,25 @@
     var logged_in = "{{=(True if auth.user is not None else False)}}";
 </script>
 {{end}}
-
+<style>
+body {
+    background-image: url("https://static.vecteezy.com/system/resources/previews/000/094/491/original/polygonal-texture-background-vector.jpg");
+}
+</style>
+<bodu>
 <div id="main_content" style="display:none">
     <div class="text-center">
-        <button class="btn" v-on:click="setPage('loggedin')">enrolled classes</button>
-        <button class="btn" v-on:click="setPage('mymessages')">messages</button>
-        <button class="btn" v-on:click="setPage('joinclass')">join/create a class</button>
-        <button class="btn" v-on:click="updatePage(page)">update current page</button>
+        <button class="button" v-on:click="setPage('loggedin')">enrolled classes</button>
+        <button class="button" v-on:click="setPage('mymessages')">messages</button>
+        <button class="button" v-on:click="setPage('joinclass')">join/create a class</button>
+        <button class="button" v-on:click="updatePage(page)">update current page</button>
     </div>
     <div v-if="page=='loggedin'">
 
         <div v-for="(classe, class_idx) in classes" style="margin-top: 1.5em">
-            <div class="nested_el row" v-on:click.stop="toggleClass(class_idx)"
+            <div class="nested_el" v-on:click.stop="toggleClass(class_idx)"
                  v-if="sel_class==-1||sel_class==class_idx">
-                <div class="nopad">class: ${classe.name}</div>
+                <div class="nopad">Class: ${classe.name}</div>
                 <hr class="nopad">
                 <div>${classe.description}</div>
 
@@ -67,7 +72,7 @@
                     <div v-for="(project, project_idx) in classe.projects">
                         <div class="nested_el" v-on:click.stop="toggleProject(project_idx, class_idx)"
                              v-if="sel_project==-1||sel_project==project_idx">
-                            <div class="nopad">project: ${project.name}</div>
+                            <div class="nopad">Project: ${project.name}</div>
                             <hr class="nopad">
                             <div>${project.description}</div>
 
@@ -106,7 +111,7 @@
                                             <span v-for="(member, member_idx) in group.members">
                                                 <span v-on:click.stop="toggleMember(member_idx)"
                                                       v-if="sel_member==-1||sel_member==member_idx">
-                                                    <img :src="member.img_link" :alt="member.name"
+                                                    <img :src="member.img_link" alt="img"
                                                          style="width:40px;height:40px;"/>
                                                     <span :class="{user_el:member.is_user}" class="regular_el nopad">${member.name}</span>
                                                 </span>
@@ -202,7 +207,7 @@
         </div>
     </div>
 </div>
-
+</bodu>
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 
 

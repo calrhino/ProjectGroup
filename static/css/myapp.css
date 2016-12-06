@@ -27,7 +27,7 @@
 }
 
 .nested_el, .regular_el {
-    background: lightgray;
+    background-image: url("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQOQzv6wLZZ5WgjfXl1J95irI3Px_-SPLRJhPrYNJxgn05WqN2XXQ");
 }
 
 .nested_el {
@@ -35,7 +35,7 @@
 }
 
 .user_el {
-    background: lightblue;
+    background: lightgreen;
 }
 
 .nopad {
@@ -74,6 +74,10 @@
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
+}
+
+.card{
+    background-color: lightblue: 
 }
 
 .jumbotron {
