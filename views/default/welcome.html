@@ -46,91 +46,98 @@
         <button class="button" v-on:click="change_background">change background</button>
     </div>
 
-    <div v-if="page=='loggedin'">
+    <transition-group name="slide" mode="out-in">
+        <div v-if="page=='loggedin'" key="loggedin">
+            <transition-group name="ffade">
+                <span v-if="sel_class!=-1" class="regular_el" v-on:click="toggleClass(sel_class)" key="a">
+                    class: ${class_name}
+                </span>
+                <span v-if="sel_project!=-1" class="regular_el" v-on:click="toggleProject(sel_project)" key="b">
+                    project: ${classes[sel_class].projects[sel_project].name}
+                </span>
+                <span v-if="sel_group!=-1" class="regular_el" v-on:click="toggleGroup(sel_group)" key="c">
+                    group: ${classes[sel_class].projects[sel_project].groups[sel_group].name}
+                </span>
+            </transition-group>
 
-        <span v-if="sel_class!=-1" class="regular_el" v-on:click="toggleClass(sel_class)">
-            class: ${classes[sel_class].name}
-        </span>
-        <span v-if="sel_project!=-1" class="regular_el" v-on:click="toggleProject(sel_project)">
-            project: ${classes[sel_class].projects[sel_project].name}
-        </span>
-        <span v-if="sel_group!=-1" class="regular_el" v-on:click="toggleGroup(sel_group)">
-            group: ${classes[sel_class].projects[sel_project].groups[sel_group].name}
-        </span>
-
-        <div v-if="sel_class==-1">
-            <div v-for="(classe, class_idx) in classes" class="top_margin">
-                <div class="nested_el" v-on:click.stop="toggleClass(class_idx)">
-                    <div class="nopad">Class: ${classe.name}</div>
-                    <hr class="nopad">
-                    <div>${classe.description}</div>
+            <div style="margin-top:0.5em;">
+                <div v-if="sel_class==-1" v-for="(classe, class_idx) in classes">
+                    <div class="nested_el top-margin"
+                         v-on:click.stop="toggleClass(class_idx)">
+                        <div class="nopad">Class: ${classe.name}</div>
+                        <hr class="nopad">
+                        <div>${classe.description}</div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div v-if="sel_class!=-1 && sel_project==-1">
-            <div v-if="classes[sel_class].is_instructor" v-on:click.stop>
-                <transition>
-                    <button v-if="create.new_project.edit" class="btn" v-on:click="toggleCreateProject">
-                        cancel
-                    </button>
-                    <button v-else class="btn" v-on:click="toggleCreateProject">
-                        create project
-                    </button>
-                </transition>
-                <div v-if="create.new_project.edit" class="top_margin">
-                    <div>
-                        Project Name: <input type="text" v-model="create.new_project.name"/>
+            <div v-if="sel_class!=-1 && sel_project==-1">
+                <div v-for="(project, project_idx) in classes[sel_class].projects">
+                    <div class="nested_el" v-on:click.stop="toggleProject(project_idx)">
+                        <div class="nopad">
+                            Project: ${project.name}
+                        </div>
+                        <hr class="nopad">
+                        <div>
+                            ${project.description}
+                        </div>
                     </div>
-                    <div class="top_margin">
-                        Project Description: <textarea v-model="create.new_project.description"></textarea>
-                    </div>
-                    <div class="top_margin">
-                        <button class="btn" v-on:click="createProject()">
+                </div>
+
+                <div v-if="classes[sel_class].is_instructor" v-on:click.stop class="regular_el top_margin">
+                    <transition name="ffade" mode="out-in">
+                        <button v-if="create.new_project.edit" key='1' class="btn" v-on:click="toggleCreateProject">
+                            cancel
+                        </button>
+                        <button v-else="" key='2' class="btn" v-on:click="toggleCreateProject">
                             create project
                         </button>
-                    </div>
+                    </transition>
+                    <transition name="slide-fade">
+                        <div v-if="create.new_project.edit" class="top_margin">
+                            <div>
+                                Project Name: <input type="text" v-model="create.new_project.name"/>
+                            </div>
+                            <div class="top_margin">
+                                Project Description: <textarea v-model="create.new_project.description"></textarea>
+                            </div>
+                            <div class="top_margin">
+                                <button class="btn" v-on:click="createProject()">
+                                    create project
+                                </button>
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+                <div class="regular_el top_margin">
+                    <button v-if="classes[sel_class].is_instructor" class="btn"
+                            v-on:click.stop="delete_class()">
+                        delete class
+                    </button>
+                    <button v-else="" class="btn top-margin" v-on:click.stop="leave_class()">
+                        leave class
+                    </button>
                 </div>
             </div>
 
-            <div v-for="(project, project_idx) in classes[sel_class].projects">
-                <div class="nested_el" v-on:click.stop="toggleProject(project_idx)">
-                    <div class="nopad">
-                        Project: ${project.name}
+            <div v-if="sel_project!=-1">
+                <div v-for="(group, group_idx) in classes[sel_class].projects[sel_project].groups">
+                    <div class="nested_el" v-on:click.stop="toggleGroup(group_idx)"
+                         v-if="sel_group==-1">
+                        <div class="nopad">
+                            Group: ${group.name}
+                        </div>
+                        <hr class="nopad">
+                        <div>
+                            ${group.description}
+                        </div>
                     </div>
-                    <hr class="nopad">
-                    <div>
-                        ${project.description}
-                    </div>
-                </div>
-            </div>
-            <button v-if="classes[sel_class].is_instructor" class="btn top_margin"
-                    v-on:click.stop="delete_class()">
-                delete class
-            </button>
-            <button v-else class="btn top-margin" v-on:click.stop="leave_class()">
-                leave class
-            </button>
-        </div>
 
-        <div v-if="sel_project!=-1">
-            <div v-for="(group, group_idx) in classes[sel_class].projects[sel_project].groups">
-                <div class="nested_el" v-on:click.stop="toggleGroup(group_idx)"
-                     v-if="sel_group==-1">
-                    <div class="nopad">
-                        Group: ${group.name}
-                    </div>
-                    <hr class="nopad">
-                    <div>
-                        ${group.description}
-                    </div>
-                </div>
-
-                <div class="nested_el" v-if="sel_group==group_idx" v-on:click.stop>
+                    <div class="nested_el" v-if="sel_group==group_idx" v-on:click.stop>
                     <span v-if="is_contact">
                         To:
                     </span>
-                    <span v-for="(member, member_idx) in group.members">
+                        <span v-for="(member, member_idx) in group.members">
                         <span v-on:click.stop="toggleMember(member_idx)" v-if="sel_member==-1||sel_member==member_idx">
                             <img :src="member.img_link" alt="user img" class="user_img"/>
                             <span :class="{user_el:member.is_user}" class="regular_el nopad">
@@ -138,142 +145,156 @@
                             </span>
                         </span>
                     </span>
-                    <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">
-                        all members
-                    </button>
-                    <button class="btn" v-if="!is_contact" v-on:click="showContact">
-                        contact
-                    </button>
-
-                    <div class="nested_el" v-on:click.stop="toggleEditStatus">
-                        status: ${group.status}
-                        <textarea class="nested_el" v-on:click.stop v-if="is_edit_status"
-                                  v-model="group.new_status"></textarea>
-                        <button class="btn" v-if="is_edit_status" v-on:click.stop="setGroupStatus()">
-                            set status
+                        <button class="btn" v-if="sel_member!=-1" v-on:click="showAllMember">
+                            all members
                         </button>
-                    </div>
+                        <button class="btn" v-if="!is_contact" v-on:click="showContact">
+                            contact
+                        </button>
 
-                    <div v-if="is_contact">
-                        <hr class="nopad">
-                        <textarea class="nested_el" v-model="user_message"></textarea>
-                        <div>
-                            <button class="btn" v-on:click.stop="contactMembers()">
-                                submit
-                            </button>
-                            <button v-if="!group.is_group" class="btn" v-on:click.stop="request_join_group">
-                                request to join group
-                            </button>
-                            <button class="btn" v-on:click.stop="hideContact">
-                                cancel
+                        <div class="nested_el" v-on:click.stop="toggleEditStatus">
+                            status: ${group.status}
+                            <textarea class="nested_el" v-on:click.stop v-if="is_edit_status"
+                                      v-model="group.new_status"></textarea>
+                            <button class="btn" v-if="is_edit_status" v-on:click.stop="setGroupStatus()">
+                                set status
                             </button>
                         </div>
-                    </div>
 
-                    <!--button v-if="!group.is_group" class="btn"
-                            v-on:click.stop="join_group(group_idx, project_idx, class_idx)">join
-                        group
-                    </button-->
-                    <span v-if="group.is_group">
+                        <div v-if="is_contact">
+                            <hr class="nopad">
+                            <textarea class="nested_el" v-model="user_message"></textarea>
+                            <div>
+                                <button class="btn" v-on:click.stop="contactMembers()">
+                                    submit
+                                </button>
+                                <button v-if="!group.is_group" class="btn" v-on:click.stop="request_join_group">
+                                    request to join group
+                                </button>
+                                <button class="btn" v-on:click.stop="hideContact">
+                                    cancel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!--button v-if="!group.is_group" class="btn"
+                                v-on:click.stop="join_group(group_idx, project_idx, class_idx)">join
+                            group
+                        </button-->
+                        <span v-if="group.is_group">
                         <button v-if="group.is_leader" class="btn" v-on:click.stop="delete_group()">
                             delete group
                         </button>
-                        <button v-else class="btn" v-on:click.stop="leave_group()">
+                        <button v-else="" class="btn" v-on:click.stop="leave_group()">
                             leave group
                         </button>
                     </span>
+                    </div>
+                </div>
+
+                <div v-if="sel_group==-1">
+                    <div v-on:click.stop class="regular_el top_margin">
+                        <transition name="ffade" mode="out-in">
+                            <button v-if="create.new_group.edit" key='1' class="btn" v-on:click="toggleCreateGroup">
+                                cancel
+                            </button>
+                            <button v-else="" key='2' class="btn" v-on:click="toggleCreateGroup">
+                                create group
+                            </button>
+                        </transition>
+                        <transition name="slide-fade">
+                            <div v-if="create.new_group.edit" class="top_margin">
+                                <div>
+                                    Group Name: <input type="text" v-model="create.new_group.name">
+                                </div>
+                                <div class="top_margin">
+                                    Group Description: <textarea v-model="create.new_group.description"></textarea>
+                                </div>
+                                <div class="top_margin">
+                                    <button class="btn" v-on:click="createGroup()">
+                                        create group
+                                    </button>
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
+                </div>
+
+                <div class="regular_el top_margin">
+                    <button class="btn" v-if="sel_group==-1 && classes[sel_class].is_instructor"
+                            v-on:click.stop="delete_project()">
+                        delete project
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <div v-if="sel_group==-1">
-                <div v-on:click.stop>
-                    <transition>
-                        <button v-if="create.new_group.edit" class="btn" v-on:click="toggleCreateGroup">
-                            cancel
-                        </button>
-                        <button v-else class="btn" v-on:click="toggleCreateGroup">
-                            create group
-                        </button>
-                    </transition>
-                    <div v-if="create.new_group.edit" class="top_margin">
-                        <div>
-                            Group Name: <input type="text" v-model="create.new_group.name">
+        <div v-if="page=='mymessages'" key="mymessages">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12" style="margin:auto">
+                    <span class="col-xs-12 text-center regular_el">SENT MESSAGES</span>
+                    <div v-for="(msg, msg_idx) in messages.sent" class="top_margin">
+                        <div :class="{user_el:msg.kind}" class="nested_el">
+                            <div>
+                                Receiver: <img :src="msg.notuser_img" alt="user img" class="user_img"/>
+                                ${msg.notuser_name}
+                            </div>
+                            <div>${msg.msg}</div>
+                            <div v-if="msg.kind != 0">${msg.status} join ${msg.group_name}</div>
+                            <button class="btn" v-on:click="delete_message(msg.id, msg_idx, true)">delete message
+                            </button>
                         </div>
-                        <div class="top_margin">
-                            Group Description: <textarea v-model="create.new_group.description"></textarea>
-                        </div>
-                        <div class="top_margin">
-                            <button class="btn" v-on:click="createGroup()">
-                                create group
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-xs-12">
+                    <span class="col-xs-12 text-center regular_el">RECEIVED MESSAGES</span>
+                    <div v-for="(msg, msg_idx) in messages.received" class="top_margin">
+                        <div :class="{user_el:msg.kind}" class="nested_el">
+                            <div>
+                                Sender: <img :src="msg.notuser_img" alt="user img" class="user_img"/>
+                                ${msg.notuser_name}
+                            </div>
+                            <div>${msg.msg}</div>
+                            <div v-if="msg.kind != 0">
+                                ${msg.status} join ${msg.group_name}
+                                <button v-on:click="accept_join_group(msg.id)" class="btn">approve</button>
+                                <button v-on:click="reject_join_group(msg.id)" class="btn">reject</button>
+                            </div>
+                            <button class="btn" v-on:click="delete_message(msg.id, msg_idx, false)">delete message
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <button class="btn top_margin" v-if="sel_group==-1 && classes[sel_class].is_instructor"
-                    v-on:click.stop="delete_project()">
-                delete project
-            </button>
         </div>
-    </div>
 
-    <div v-if="page=='mymessages'">
-        <div class="row">
-            <div class="col-sm-6 col-xs-12" style="margin:auto">
-                <span class="col-xs-12 text-center regular_el">SENT MESSAGES</span>
-                <div v-for="(msg, msg_idx) in messages.sent" class="top_margin">
-                    <div :class="{user_el:msg.kind}" class="nested_el">
-                        <div>
-                            Receiver: <img :src="msg.notuser_img" alt="user img" class="user_img"/> ${msg.notuser_name}
+        <div v-if="page=='joinclass'" key="joinclass">
+            <div class="regular_el">
+                <transition name="ffade" mode="out-in">
+                    <button v-if="create.new_class.edit" key='1' class="btn" v-on:click="toggleCreateClass">cancel
+                    </button>
+                    <button v-else="" class="btn" key='2' v-on:click="toggleCreateClass">create class</button>
+                </transition>
+                <transition name="slide-fade">
+                    <div v-if="create.new_class.edit" class="top_margin">
+                        <div>Class Name: <input type="text" v-model="create.new_class.name"></div>
+                        <div class="top_margin">Class Description: <textarea
+                                v-model="create.new_class.description"></textarea></div>
+                        <div class="top_margin">
+                            <button class="btn" v-on:click="createClass">create class</button>
                         </div>
-                        <div>${msg.msg}</div>
-                        <div v-if="msg.kind != 0">${msg.status} join ${msg.group_name}</div>
-                        <button class="btn" v-on:click="delete_message(msg.id, msg_idx, true)">delete message</button>
                     </div>
-                </div>
+                </transition>
             </div>
-
-            <div class="col-sm-6 col-xs-12">
-                <span class="col-xs-12 text-center regular_el">RECEIVED MESSAGES</span>
-                <div v-for="(msg, msg_idx) in messages.received" class="top_margin">
-                    <div :class="{user_el:msg.kind}" class="nested_el">
-                        <div>
-                            Sender: <img :src="msg.notuser_img" alt="user img" class="user_img"/> ${msg.notuser_name}
-                        </div>
-                        <div>${msg.msg}</div>
-                        <div v-if="msg.kind != 0">
-                            ${msg.status} join ${msg.group_name}
-                            <button v-on:click="accept_join_group(msg.id)" class="btn">approve</button>
-                            <button v-on:click="reject_join_group(msg.id)" class="btn">reject</button>
-                        </div>
-                        <button class="btn" v-on:click="delete_message(msg.id, msg_idx, false)">delete message</button>
-                    </div>
-                </div>
+            <div class="nested_el" v-for="(classe, class_idx) in allclasses">
+                <div class="nopad">class: ${classe.name}</div>
+                <hr class="nopad">
+                <div>${classe.description}</div>
+                <button class="btn" v-on:click="join_class(class_idx)">join class</button>
             </div>
         </div>
-    </div>
-
-    <div v-if="page=='joinclass'">
-        <transition>
-            <button v-if="create.new_class.edit" class="btn" v-on:click="toggleCreateClass">cancel</button>
-            <button v-else class="btn" v-on:click="toggleCreateClass">create class</button>
-        </transition>
-        <div v-if="create.new_class.edit" class="top_margin">
-            <div>Class Name: <input type="text" v-model="create.new_class.name"></div>
-            <div class="top_margin">Class Description: <textarea
-                    v-model="create.new_class.description"></textarea></div>
-            <div class="top_margin">
-                <button class="btn" v-on:click="createClass">create class</button>
-            </div>
-        </div>
-        <div class="nested_el" v-for="(classe, class_idx) in allclasses">
-            <div class="nopad">class: ${classe.name}</div>
-            <hr class="nopad">
-            <div>${classe.description}</div>
-            <button class="btn" v-on:click="join_class(class_idx)">join class</button>
-        </div>
-    </div>
+    </transition-group>
 </div>
 <script src="{{=URL('static','js/default_index.js')}}"></script>
 

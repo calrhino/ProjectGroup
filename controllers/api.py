@@ -309,6 +309,7 @@ def delete_message():
     msg = db.messages[request.vars.id]
     if msg.sender_ref.id == msg.receiver_ref.id:
         db(db.messages.id == id).delete()
+        return response.json('delete message success')
     else:
         is_sender = True if msg.sender_ref.id == auth.user_id else False
 

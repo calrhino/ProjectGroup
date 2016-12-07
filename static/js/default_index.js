@@ -20,6 +20,7 @@ var main_content = new Vue({
             sel_project: -1,
             sel_group: -1,
             sel_member: -1,
+            class_name:'',
             user_message: '',
             is_contact: false,
             is_edit_status: false,
@@ -173,8 +174,8 @@ var main_content = new Vue({
             },
             updatePage: function (page) {
                 if (page == 'loggedin') {
-                    this.getClasses();
                     this.hideClass();
+                    this.getClasses();
                 }
                 else if (page == 'joinclass') {
                     this.getAllClasses();
@@ -190,6 +191,7 @@ var main_content = new Vue({
                     this.hideClass();
                 else {
                     this.sel_class = class_idx;
+                    this.class_name=this.classes[this.sel_class].name;
                     if (this.classes[class_idx].projects[0] == null) {
                         this.getProjects();
                     }
@@ -238,8 +240,9 @@ var main_content = new Vue({
                 this.is_contact = true;
             },
             hideClass: function () {
-                this.hideProject();
                 this.sel_class = -1;
+                this.class_name = '';
+                this.hideProject();
             },
             hideProject: function () {
                 this.hideGroup();

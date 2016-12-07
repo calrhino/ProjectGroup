@@ -1,24 +1,46 @@
 .slide-fade-enter-active, .slide-fade-leave-active {
-    transition: all 0.2s;
+    transition: all .4s;
 }
 
-.slide-fade-enter, .slide-fade-leave-active {
+.slide-fade-leave-active {
     opacity: 0;
     transform: translateY(-5px);
 }
 
-.fade-enter-active{
-    transition: all 0.2s;
-    transition-delay: 0.2s;
-}
-
-.fade-leave{
-    transition: 0s;
-    opacity:0
-}
-
-.fade-enter{
+.slide-fade-enter {
     opacity: 0;
+    transform: translateY(-5px);
+}
+
+.slide-fade-move {
+    transition: 0.5s;
+}
+
+.slide-enter-active {
+    transition: all 0.5s;
+}
+
+.slide-enter {
+    opacity:0;
+    transform: translateY(5px);
+}
+
+.slide-leave-active {
+    opacity: 0;
+    transition: all 0s;
+    transform: translateY(-5px);
+}
+
+.ffade-enter-active, .ffade-leave-active {
+    transition: all 0.5s;
+}
+
+.ffade-enter, .ffade-leave-active {
+    opacity: 0;
+}
+
+.ffade-move {
+    transition: 0.5s;
 }
 
 .nested_el, .regular_el, .user_el {
@@ -49,7 +71,7 @@
 }
 
 .header {
-    margin :0 0 30px 0;
+    margin: 0 0 30px 0;
     padding: 5px 0 0 0;
     width: 100%;
     background-image: url("https://chrissurratt.files.wordpress.com/2013/02/community-group.jpg");
@@ -76,7 +98,7 @@
     cursor: pointer;
 }
 
-.card{
+.card {
     background-color: lightblue;
 }
 
@@ -86,25 +108,26 @@
 
 /*This supports the changing the background images*/
 .bg0 {
-    background-image: url("http://media.istockphoto.com/vectors/seamless-pattern-background-white-vector-id508012000?k=6&m=508012000&s=170667a&w=0&h=-NEyE2BAlJqutLyrhD8fbgFUT6Ysd22OxpAZEfAIoZo=")!important;
+    background-image: url("http://media.istockphoto.com/vectors/seamless-pattern-background-white-vector-id508012000?k=6&m=508012000&s=170667a&w=0&h=-NEyE2BAlJqutLyrhD8fbgFUT6Ysd22OxpAZEfAIoZo=") !important;
 }
 
 .bg1 {
     background-color: black;
 }
+
 .bg2 {
     background-image: url("https://static.vecteezy.com/system/resources/previews/000/094/491/original/polygonal-texture-background-vector.jpg");
 }
 
 .user_img {
-    width:40px;
-    height:40px;
+    width: 40px;
+    height: 40px;
 }
 
-.top_margin{
-    margin-top:1.5em;
+.top_margin {
+    margin-top: 1.5em;
 }
 
-.hide{
-    display:none;
+.hide {
+    display: none;
 }
