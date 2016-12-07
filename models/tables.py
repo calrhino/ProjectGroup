@@ -41,9 +41,16 @@ db.define_table('class_users',
                 , ondelete="NO ACTION"
                 )
 
+# kind 0: regular message; 1: request to join group
+# state 0: not deleted; 1: deleted by sender; 2: deleted by receiver; 3: deleted by both (nonexistent)
+# status: 0: pending; 1: approved; -1: rejected
 db.define_table('messages',
                 Field('sender_ref', 'reference auth_user'),
                 Field('receiver_ref', 'reference auth_user'),
+                Field('group_ref', 'reference groups', default=None),
+                Field('kind', 'integer', default=0),
+                Field('del_state', 'integer', default=0),
+                Field('status', 'integer', default=0),
                 Field('msg', 'string', length=200)
                 , ondelete="NO ACTION"
                 )

@@ -8,9 +8,9 @@ def get_all_classes():
     classes = db(db.classes).select()
     exclude = db(db.class_users.user_ref == auth.user).select()
 
-    # exclude code does not work quite right, so have hacky fix instead
-    #for i, e in enumerate(exclude):
+    # for i, e in enumerate(exclude):
     #    classes = classes.exclude(lambda row: row.id == e.id)
+    # exclude code above does not work quite right, so have hacky fix instead
 
     response_classes = []
 
@@ -28,12 +28,28 @@ def get_all_classes():
 @auth.requires_login()
 def get_messages():
     """get the messages associated with a user"""
-    messages = db(db.messages.receiver_ref == auth.user).select(orderby=~db.messages.id)
-    response_messages = []
+    received_messages = db(db.messages.receiver_ref == auth.user).select(orderby=~db.messages.id)
+    sent_messages = db(db.messages.sender_ref == auth.user).select(orderby=~db.messages.id)
+    response_received_messages = []
+    response_sent_messages = []
 
-    for i, m in enumerate(messages):
-        response_messages.append(response_message(m))
-    return response.json(dict(messages=response_messages))
+    # dict to return the appropriate status of a message
+    text = {0: 'pending', 1: 'accepted', -1: 'rejected'}
+
+    # get all messages you have sent, except those deleted by you
+    # response_message(m, is_sender=True)
+    for i, m in enumerate(sent_messages):
+        if not m.del_state & 1:
+            response_sent_messages.append(response_message(m, text, True))
+
+    # get all messages sent to you, except those deleted by you
+    # response_message(m, is_sender=False)
+    for i, m in enumerate(received_messages):
+        if not m.del_state & 2:
+            response_received_messages.append(response_message(m, text, False))
+
+    return response.json(dict(received_messages=response_received_messages,
+                              sent_messages=response_sent_messages))
 
 
 @auth.requires_login()
@@ -202,8 +218,11 @@ def join_group():
     """a student joins a group"""
     group_id = request.vars.group_id
     student = auth.user
-
-    db.group_students.insert(student_ref=student, group_ref=db.groups[group_id])
+    group = db.groups[group_id]
+    if db(db.group_students.group_ref == group.id and
+                          db.group_students.student_ref == student.id).select().first() is not None:
+        raise HTTP(400)
+    db.group_students.insert(student_ref=student, group_ref=group)
     return response.json(response_member(auth.user))
 
 
@@ -248,12 +267,73 @@ def set_group_status():
 
 # messages API calls ----------------------------
 @auth.requires_login()
+def request_join_group():
+    """user requests to join a group"""
+    sender = auth.user
+    receiver = db.auth_user[request.vars.id]
+    group = db.groups[request.vars.group_id]
+    db.messages.insert(group_ref=group, sender_ref=sender, receiver_ref=receiver, msg=request.vars.msg, kind=1)
+    return response.json('send request join group success')
+
+
+@auth.requires_login()
+def accept_join_group():
+    """user in group accepts a user to join group"""
+    msg = db.messages[request.vars.id]
+    msg.update_record(status=1)
+    student = db.auth_user[msg.sender_ref]
+    group = db.groups[msg.group_ref]
+    if db(db.group_students.group_ref == group.id and
+                          db.group_students.student_ref == student.id).select().first() is not None:
+        raise HTTP(400)
+    db.group_students.insert(student_ref=student, group_ref=group)
+    return response.json('accept request success; student has joined your group')
+
+
+@auth.requires_login()
+def reject_join_group():
+    """user in group rejects a user requesting to join"""
+    msg = db.messages[request.vars.id]
+    msg.update_record(status=-1)
+    return response.json('reject request success')
+
+
+@auth.requires_login()
+def delete_message():
+    """delete message from user's view or from database if both users have deleted the message"""
+    id = request.vars.id
+    # if invalid variables raise error
+    if id is None:
+        raise HTTP(400)
+
+    msg = db.messages[request.vars.id]
+    if msg.sender_ref.id == msg.receiver_ref.id:
+        db(db.messages.id == id).delete()
+    else:
+        is_sender = True if msg.sender_ref.id == auth.user_id else False
+
+    # if the message is already "deleted" by the user, raise error
+    if is_sender and msg.del_state & 1 or not is_sender and msg.del_state & 2:
+        raise HTTP(400)
+
+    # delete message request(from user) is valid
+
+    # delete message from table if the other user has already "deleted" the message
+    if msg.del_state + 3 > 3:
+        db(db.messages.id == id).delete()
+    else:
+        msg.update_record(del_state=1 if is_sender else 2)
+    return response.json('delete message success')
+
+
+@auth.requires_login()
 def contact_user():
     """contacts the requested user"""
     sender = auth.user
     receiver = db.auth_user[request.vars.id]
-    db.messages.insert(sender_ref=sender, receiver_ref=receiver, msg=request.vars.msg)
-    return response.json('send message to ' + receiver.first_name + ' success')
+    msg = db.messages.insert(sender_ref=sender, receiver_ref=receiver, msg=request.vars.msg)
+    text = {0: 'pending', 1: 'accepted', -1: 'rejected'}
+    return response.json(dict(message=response_message(msg, text, True)))
 
 
 # other methods  -------------------------------- -------------------------------------------------
@@ -308,13 +388,18 @@ def response_member(s):
     )
 
 
-def response_message(m):
-    sref = m.sender_ref
+def response_message(m, text, is_sender):
+    ref = m.receiver_ref if is_sender else m.sender_ref
+    kind = True if m.kind else False
     return dict(
         id=m.id,
-        sender=sref.first_name + ' ' + sref.last_name,
-        sender_id=sref.id,
+        notuser_name=ref.first_name + ' ' + ref.last_name,
+        notuser_id=ref.id,
+        notuser_img=ref.img_link,
         msg=m.msg,
+        status=text[m.status] if kind else None,
+        group_name=m.group_ref.name if kind else None,
+        kind=m.kind,
     )
 
 
